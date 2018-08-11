@@ -1,0 +1,48 @@
+﻿<Window x:Class="Sql_Widget.MainWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+		xmlns:myControls="clr-namespace:Sql_Widget.Controls"
+		
+		WindowStyle="None" SizeToContent="WidthAndHeight" ResizeMode="NoResize"
+		FontSize="15" ShowInTaskbar="False" SizeChanged="Window_SizeChanged"
+		TextElement.Foreground="{DynamicResource MaterialDesignBody}" Background="{DynamicResource MaterialDesignPaper}"
+		FontFamily="{DynamicResource MaterialDesignFont}">
+	<Window.InputBindings>
+		<KeyBinding Key="F1" Command="{Binding HelpCommand}" />
+		<KeyBinding Key="F5" Command="{Binding ExecuteCommand}" />
+		<KeyBinding Key="Tab" Modifiers="Ctrl" Command="{Binding ChangeTab}" CommandParameter="{Binding ElementName=Tabs}" />
+	</Window.InputBindings>
+	<Expander ExpandDirection="Left" Expanded="Expander_Expanded" Collapsed="Expander_Collapsed" IsExpanded="True">
+		<Expander.Header>
+			<TextBlock>
+					<materialDesign:PackIcon Kind="Database" Width="24" Height="24"/>
+			</TextBlock>
+		</Expander.Header>
+		<StackPanel>
+			<myControls:DBandTableControl x:Name="DBSelector"/>
+			<TabControl Name="Tabs" SelectedItem="{Binding SelectedTab,Mode=OneWayToSource}">
+				<TabItem Header="Query" IsTabStop="False">
+					<TextBox Height="300" MaxWidth="450" FontSize="20" Text="{Binding QueryValue,UpdateSourceTrigger=PropertyChanged}" 
+							 IsEnabled="{Binding QueryEnabled,Mode=OneWay}" HorizontalAlignment="Stretch" 
+							 TextWrapping="Wrap" AcceptsReturn="True" Margin="5"/>
+				</TabItem>
+				<TabItem Header="SELECT" IsTabStop="False">
+					<StackPanel Orientation="Horizontal" Height="300">
+						<myControls:SelectControl />
+						<myControls:WhereControl />
+					</StackPanel>
+				</TabItem>
+				<TabItem Header="UPDATE" IsTabStop="False" Visibility="Collapsed" />
+				<TabItem Header="INSERT" IsTabStop="False" Visibility="Collapsed"/>
+				<TabItem Header="DELETE" IsTabStop="False" Visibility="Collapsed"/>
+				<TabItem Header="History" IsTabStop="False">
+					<myControls:HistoryControl Height="300"/>
+				</TabItem>
+				<TabItem Header="Favorite" IsTabStop="False" Visibility="Collapsed"/>
+			</TabControl>
+			<myControls:ButtonsControl/>
+		</StackPanel>
+	</Expander>
+</Window>

@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="Sql_Widget.Controls.SelectControl"
+			xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+			xmlns:local="clr-namespace:Sql_Widget.Controls"
+			xmlns:helper="clr-namespace:Sql_Widget.Helper"
+			
+			xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+			 Background="{DynamicResource MaterialDesignPaper}">
+	<UserControl.InputBindings>
+		<KeyBinding Key="Right" Modifiers="Ctrl" Command="{Binding AddFieldCommand}" CommandParameter="{x:Reference Name=FieldsList}"/>
+		<KeyBinding Key="Left" Modifiers="Ctrl" Command="{Binding RemoveFieldCommand}" CommandParameter="{x:Reference Name=SelectedFieldsList}"/>
+	</UserControl.InputBindings>
+	<GroupBox IsEnabled="{Binding ComponentsEnabled}">
+		<GroupBox.Header>
+			<TextBlock Text="Select Fields" HorizontalAlignment="Center"/>
+		</GroupBox.Header>
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+
+			<ListBox x:Name="FieldsList" Margin="5" SelectionMode="Multiple" Width="150" VerticalAlignment="Stretch"
+					 ItemsSource="{Binding VisibleFields, Mode=OneWay}" DisplayMemberPath="Name" />
+			<StackPanel Orientation="Vertical" Grid.Column="1" VerticalAlignment="Center">
+				<Button Command="{Binding AddFieldCommand}" CommandParameter="{x:Reference Name=FieldsList}" 
+						Margin="5,10" IsTabStop="False" ToolTip="Add to Select Clause (CTRL+Right)"
+						Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
+					<materialDesign:PackIcon Kind="ArrowRight" Height="24" Width="24" />
+				</Button>
+				<Button Command="{Binding RemoveFieldCommand}" CommandParameter="{x:Reference Name=SelectedFieldsList}" 
+						Margin="5,10" IsTabStop="False" ToolTip="Remove From Select Clause (CTRL+Left)"
+						Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
+					<materialDesign:PackIcon Kind="ArrowLeft" Height="24" Width="24" />
+				</Button>
+			</StackPanel>
+			<ListBox x:Name="SelectedFieldsList" Margin="5" SelectionMode="Multiple" Grid.Column="2" Width="150"
+					 ItemsSource="{Binding SelectedFields, Mode=OneWay}" DisplayMemberPath="Name"  VerticalAlignment="Stretch"/>
+		</Grid>
+	</GroupBox>
+</UserControl>

@@ -1,0 +1,53 @@
+﻿<UserControl x:Class="Sql_Widget.Controls.HistoryControl"
+			xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+			xmlns:converters="clr-namespace:Sql_Widget.Helper"
+
+			xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" FontSize="20"
+			FontFamily="{DynamicResource MaterialDesignFont}" Background="{DynamicResource MaterialDesignPaper}">
+	<UserControl.Resources>
+		<converters:ResultToColorConverter x:Key="ResultToColorConverter" />
+		<Style x:Key="MyGridStyle" TargetType="{x:Type Grid}">
+			<Style.Resources>
+				<Style TargetType="{x:Type TextBlock}">
+					<Setter Property="Foreground" Value="{Binding Succeeded,Converter={StaticResource ResultToColorConverter}}" />
+				</Style>
+			</Style.Resources>
+		</Style>
+		<DataTemplate x:Key="HistoryElement">
+			<Grid Margin="5" VerticalAlignment="Center"  HorizontalAlignment="Stretch" Style="{StaticResource MyGridStyle}">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition/>
+					<ColumnDefinition/>
+					<ColumnDefinition/>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition/>
+					<RowDefinition/>
+				</Grid.RowDefinitions>
+				<StackPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Orientation="Horizontal" Margin="5,0">
+					<TextBlock Text="{Binding Date}" VerticalAlignment="Center" />
+					<Separator  Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+				</StackPanel>
+				<StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch" Orientation="Horizontal" Margin="5,0">
+					<TextBlock Text="{Binding RowCount}" VerticalAlignment="Center" />
+					<TextBlock Text=" Row" VerticalAlignment="Center" HorizontalAlignment="Left" />
+					<Separator  Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+				</StackPanel>
+				<StackPanel Grid.Column="2" Grid.Row="0" HorizontalAlignment="Right" Orientation="Horizontal" Margin="5,0">
+					<TextBlock Text="in DB: " VerticalAlignment="Center" HorizontalAlignment="Right" />
+					<TextBlock Text="{Binding DBName}" VerticalAlignment="Center"/>
+				</StackPanel>
+
+				<TextBox Grid.ColumnSpan="3" Grid.Row="1" HorizontalAlignment="Left" TextWrapping="Wrap"
+						   Text="{Binding Query}" Margin="5" IsReadOnly="True" MaxWidth="500"/>
+			</Grid>
+		</DataTemplate>
+
+	</UserControl.Resources>
+	<ListBox Margin="5" ItemTemplate="{StaticResource HistoryElement}" ItemsSource="{Binding HistoryItems}"
+			 SelectedItem="{Binding SelectedHistoryElement,Mode=OneWayToSource}">
+
+	</ListBox>
+</UserControl>

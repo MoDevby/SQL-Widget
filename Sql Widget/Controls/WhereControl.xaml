@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="Sql_Widget.Controls.WhereControl"
+			xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+			xmlns:local="clr-namespace:Sql_Widget.Controls"
+			 
+			xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+			Background="{DynamicResource MaterialDesignPaper}">
+	<UserControl.Resources>
+		<DataTemplate x:Key="ConditionElement">
+			<Grid Margin="5" VerticalAlignment="Center"  HorizontalAlignment="Stretch">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition/>
+					<ColumnDefinition/>
+					<ColumnDefinition/>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition/>
+					<RowDefinition/>
+				</Grid.RowDefinitions>
+
+				<ComboBox ItemsSource="{Binding DataContext.Fields,ElementName=DummyElement,Mode=OneWay}" Grid.Column="0" VerticalAlignment="Center" 
+						  SelectedValue="{Binding SelectedField,UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="Name" DisplayMemberPath="Name" IsEditable="True" MinWidth="100" Margin="5"
+						   materialDesign:HintAssist.Hint="Field"/>
+
+				<ComboBox ItemsSource="{Binding DataContext.CompareOperators,ElementName=DummyElement,Mode=OneTime }" Grid.Column="1" VerticalAlignment="Center"
+						  SelectedValue="{Binding SelectedOerator,UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="Key" DisplayMemberPath="Value" IsEditable="True" MinWidth="50" Margin="5"
+						   materialDesign:HintAssist.Hint="Operator"/>
+
+				<TextBox Text="{Binding Value,UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" VerticalAlignment="Center" Margin="5" MinWidth="100"  materialDesign:HintAssist.Hint="Value"/>
+
+				<ComboBox ItemsSource="{Binding DataContext.RelationOperators,ElementName=DummyElement,Mode=OneTime}" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" 
+						  SelectedValue="{Binding NextLineOperator,UpdateSourceTrigger=PropertyChanged}" IsEditable="True" MinWidth="50"  Margin="5" />
+			</Grid>
+		</DataTemplate>
+	</UserControl.Resources>
+	<GroupBox IsEnabled="{Binding ComponentsEnabled}" >
+		<GroupBox.Header>
+			<TextBlock Text="Where Clause" HorizontalAlignment="Center"/>
+		</GroupBox.Header>
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+			<ListBox Margin="5" ItemTemplate="{StaticResource ConditionElement}" ItemsSource="{Binding Conditions}" Grid.Row="0"
+				HorizontalAlignment="Stretch"/>
+
+			<FrameworkElement  Name="DummyElement" Visibility="Collapsed"/>
+
+			<Button VerticalAlignment="Top" Foreground="ForestGreen" FontSize="20" 
+					Style="{StaticResource InvisButton}" Command="{Binding AddConditionCommand}" Grid.Row="1">
+				<materialDesign:PackIcon Kind="Plus" Height="24" Width="24" />
+			</Button>
+		</Grid>
+	</GroupBox>
+</UserControl>

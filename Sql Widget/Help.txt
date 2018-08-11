@@ -1,0 +1,4 @@
+﻿Shortcuts:
+	F1:Help.
+	Ctrl + Tab:Change the Tab.
+	F5:Execute.
