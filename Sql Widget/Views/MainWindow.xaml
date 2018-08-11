@@ -34,13 +34,13 @@
 						<myControls:WhereControl />
 					</StackPanel>
 				</TabItem>
-				<TabItem Header="UPDATE" IsTabStop="False" Visibility="Collapsed" />
+				<!--<TabItem Header="UPDATE" IsTabStop="False" Visibility="Collapsed" />
 				<TabItem Header="INSERT" IsTabStop="False" Visibility="Collapsed"/>
-				<TabItem Header="DELETE" IsTabStop="False" Visibility="Collapsed"/>
+				<TabItem Header="DELETE" IsTabStop="False" Visibility="Collapsed"/>-->
 				<TabItem Header="History" IsTabStop="False">
 					<myControls:HistoryControl Height="300"/>
 				</TabItem>
-				<TabItem Header="Favorite" IsTabStop="False" Visibility="Collapsed"/>
+				<!--<TabItem Header="Favorite" IsTabStop="False" Visibility="Collapsed"/>-->
 			</TabControl>
 			<myControls:ButtonsControl/>
 		</StackPanel>

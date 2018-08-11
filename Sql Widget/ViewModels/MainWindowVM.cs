@@ -162,7 +162,7 @@ namespace Sql_Widget.ViewModels
 				return new ButtonsCommand((object obj) =>
 				{
 					var tabs = (TabControl)obj;
-					tabs.SelectedIndex = tabs.SelectedIndex < 1 ? tabs.SelectedIndex + 1 : 0;
+					tabs.SelectedIndex = tabs.SelectedIndex < tabs.Items.Count - 1 ? tabs.SelectedIndex + 1 : 0;
 				});
 			}
 		}
