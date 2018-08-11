@@ -18,9 +18,9 @@
 		<DataTemplate x:Key="HistoryElement">
 			<Grid Margin="5" VerticalAlignment="Center"  HorizontalAlignment="Stretch" Style="{StaticResource MyGridStyle}">
 				<Grid.ColumnDefinitions>
-					<ColumnDefinition/>
-					<ColumnDefinition/>
-					<ColumnDefinition/>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="Auto"/>
 				</Grid.ColumnDefinitions>
 				<Grid.RowDefinitions>
 					<RowDefinition/>

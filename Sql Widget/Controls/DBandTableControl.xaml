@@ -7,42 +7,43 @@
 			xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
 			 Background="{DynamicResource MaterialDesignPaper}">
 	<!--<GroupBox Header="DB and Table" HorizontalAlignment="Stretch">-->
-		<Grid HorizontalAlignment="Stretch">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition/>
-				<ColumnDefinition/>
-				<ColumnDefinition/>
-				<ColumnDefinition/>
-				<ColumnDefinition/>
-				<ColumnDefinition/>
-				<ColumnDefinition/>
-			</Grid.ColumnDefinitions>
+	<Grid HorizontalAlignment="Stretch">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="Auto"/>
+		</Grid.ColumnDefinitions>
 
-			<TextBlock Grid.Column="0" Margin="5" Text="DBs:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-			<ComboBox Grid.Column="1" Margin="5" IsTextSearchEnabled="True" IsEditable="True" MinWidth="100" 
-					  materialDesign:HintAssist.Hint="Select DB" Name="DBSelector"
+		<TextBlock Grid.Column="0" Text="DBs:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+		<ComboBox Grid.Column="1"  IsTextSearchEnabled="True" IsEditable="True" MinWidth="100" 
+					  materialDesign:HintAssist.Hint="Select DB" Name="DBSelector" Margin="5"
 					  SelectedItem="{Binding SelectedDB}" ItemsSource="{Binding DBsList,Mode=OneWay}" />
 
-
-			<TextBlock Grid.Column="2" Margin="5" Text="Tables:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-			<ComboBox Grid.Column="3" Margin="5" IsTextSearchEnabled="True" IsEditable="True" MinWidth="100" 
-					  materialDesign:HintAssist.Hint="Select Table"
+		<TextBlock Grid.Column="2" Margin="5" Text="Tables:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+		<ComboBox Grid.Column="3"  IsTextSearchEnabled="True" IsEditable="True" MinWidth="100" 
+					  materialDesign:HintAssist.Hint="Select Table" Margin="5"
 					  SelectedItem="{Binding SelectedTable}" ItemsSource="{Binding TablesList,Mode=OneWay}" 
 					  IsEnabled="{Binding SelectTablesIsEnabled,Mode=OneWay}"
-					  KeyboardNavigation.TabNavigation="Local"/>
+					  KeyboardNavigation.TabNavigation="Local" />
 
-			<Button Grid.Column="4" Margin="5" ToolTip="Clear DBs/Tables Cache" Command="{Binding ResetCacheCommand}" IsTabStop="False"
-					Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
+		<DockPanel Grid.Column="4" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+			<Button Margin="5,0" ToolTip="Clear DBs/Tables Cache" Command="{Binding ResetCacheCommand}" IsTabStop="False"
+					Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" DockPanel.Dock="Left" HorizontalAlignment="Left">
 				<materialDesign:PackIcon Kind="Refresh" Height="24" Width="24" />
 			</Button>
-			<Button Grid.Column="5" Margin="5" ToolTip="Help (F1)" Command="{Binding CloseCommand}" IsTabStop="False"
-					Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
-			<materialDesign:PackIcon Kind="Help" Height="24" Width="24"/>
+			<Button Margin="5,0" ToolTip="Help (F1)" Command="{Binding CloseCommand}" IsTabStop="False"
+					Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" DockPanel.Dock="Right" HorizontalAlignment="Right">
+				<materialDesign:PackIcon Kind="Help" Height="24" Width="24"/>
 			</Button>
-			<Button Grid.Column="6" Margin="5" ToolTip="Close (ALT+F4)" Command="{Binding CloseCommand}" IsTabStop="False"
-					CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
-				<materialDesign:PackIcon Kind="Close" Height="24" Width="24" />
-			</Button>
-		</Grid>
+		</DockPanel>
+		<Button Grid.Column="5" Margin="5" ToolTip="Close (ALT+F4)" Command="{Binding CloseCommand}" IsTabStop="False"
+					CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+					Background="IndianRed" HorizontalAlignment="Right">
+			<materialDesign:PackIcon Kind="Close" Height="24" Width="24" />
+		</Button>
+	</Grid>
 	<!--</GroupBox>-->
 </UserControl>
