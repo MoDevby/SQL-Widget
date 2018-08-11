@@ -22,9 +22,9 @@
 		</Expander.Header>
 		<StackPanel>
 			<myControls:DBandTableControl x:Name="DBSelector"/>
-			<TabControl Name="Tabs" SelectedItem="{Binding SelectedTab,Mode=OneWayToSource}" MaxWidth="500">
+			<TabControl Name="Tabs" SelectedItem="{Binding SelectedTab,Mode=OneWayToSource}" Background="{DynamicResource MaterialDesignPaper}">
 				<TabItem Header="Query" IsTabStop="False">
-					<TextBox Height="300" FontSize="20" Text="{Binding QueryValue,UpdateSourceTrigger=PropertyChanged}" 
+					<TextBox Height="290" MaxWidth="470" Margin="5" FontSize="20" Text="{Binding QueryValue,UpdateSourceTrigger=PropertyChanged}"
 							 IsEnabled="{Binding QueryEnabled,Mode=OneWay}" HorizontalAlignment="Stretch" TextWrapping="Wrap" AcceptsReturn="True"
 							 Background="{DynamicResource MaterialDesignPaper}" Foreground="{DynamicResource MaterialDesignBody}"/>
 				</TabItem>
