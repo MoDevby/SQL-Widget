@@ -140,11 +140,11 @@ namespace Sql_Widget.ViewModels
 		{
 			var historyItem = new HistoryItem
 			{
-				Date = DateTime.Now.ToString("G"),
+				Date = $"({DateTime.Now.ToShortTimeString()})",
 				DBName = db,
 				Query = query
 			};
-			Tuple<bool, int> result = await Task.Run(() => resultVm.GetResultInfo());
+			var result = await Task.Run(() => resultVm.GetResultInfo());
 			historyItem.Succeeded = result.Item1;
 			historyItem.RowCount = result.Item2;
 

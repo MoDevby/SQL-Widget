@@ -8,13 +8,11 @@ namespace Sql_Widget.Models
 	{
 		public static string ConnectionString(string dbName) => $"server=.;Database={dbName};Integrated Security=true";
 
-		//public Task<DataTable> ExecuteQuery(string dbName, string query) => Task.Run(() => Execute(dbName, query));
-
 		public DataTable Execute(string dbName, string query)
 		{
 			using (SqlConnection con = new SqlConnection(ConnectionString(dbName)))
 			{
-				//Thread.Sleep(10000);
+				//Thread.Sleep(1000);
 				SqlCommand cmd = new SqlCommand(query, con);
 				SqlDataAdapter sda = new SqlDataAdapter(cmd);
 				DataTable dt = new DataTable();

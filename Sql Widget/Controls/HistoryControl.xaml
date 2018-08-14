@@ -30,14 +30,14 @@
 					<TextBlock Text="{Binding Date}" VerticalAlignment="Center" />
 					<Separator  Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
 				</StackPanel>
-				<StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch" Orientation="Horizontal" Margin="5,0">
-					<TextBlock Text="{Binding RowCount}" VerticalAlignment="Center" />
-					<TextBlock Text=" Row" VerticalAlignment="Center" HorizontalAlignment="Left" />
+				<StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Right" Orientation="Horizontal" Margin="5,0">
+					<TextBlock Text="DB: " VerticalAlignment="Center" HorizontalAlignment="Right" />
+					<TextBlock Text="{Binding DBName}" VerticalAlignment="Center"/>
 					<Separator  Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
 				</StackPanel>
-				<StackPanel Grid.Column="2" Grid.Row="0" HorizontalAlignment="Right" Orientation="Horizontal" Margin="5,0">
-					<TextBlock Text="in DB: " VerticalAlignment="Center" HorizontalAlignment="Right" />
-					<TextBlock Text="{Binding DBName}" VerticalAlignment="Center"/>
+				<StackPanel Grid.Column="2" Grid.Row="0" HorizontalAlignment="Stretch" Orientation="Horizontal" Margin="5,0">
+					<TextBlock Text="{Binding RowCount}" VerticalAlignment="Center" />
+					<TextBlock Text=" Rows" VerticalAlignment="Center" HorizontalAlignment="Left" />
 				</StackPanel>
 
 				<TextBox Grid.ColumnSpan="3" Grid.Row="1" HorizontalAlignment="Left" TextWrapping="Wrap"
