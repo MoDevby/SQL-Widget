@@ -4,6 +4,7 @@ using Sql_Widget.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,6 +24,7 @@ namespace Sql_Widget.ViewModels
 		private TablesModel _tableModel = new TablesModel();
 		private DBModel _dbModel = new DBModel();
 		private TabItem _selectedTab;
+
 		#region Properties
 		#region Window
 		public TabItem SelectedTab
@@ -62,7 +64,7 @@ namespace Sql_Widget.ViewModels
 		private bool IsValidQuery => !string.IsNullOrWhiteSpace(SelectedDB) && !string.IsNullOrWhiteSpace(QueryValue);
 		#endregion
 		public List<TableColumn> Fields { get; set; } = new List<TableColumn>();
-		public bool ComponentsEnabled => Fields.Any();
+		public bool ComponentsEnabled => Fields.Count() > 1;
 		#region Select
 		public List<TableColumn> VisibleFields => Fields.Where(x => !SelectedFields.Contains(x)).ToList();
 		public List<TableColumn> SelectedFields { get; set; } = new List<TableColumn>();
@@ -93,7 +95,8 @@ namespace Sql_Widget.ViewModels
 		{
 			SelectedFields = new List<TableColumn>();
 			Conditions = new List<ConditionElement> { new ConditionElement() };
-			Fields = await TableColumnsModel.GetTableColumns(SelectedDB, SelectedTable);
+			Fields = new List<TableColumn> { new TableColumn { Name = "*", Position = 0, Type = "*" } }
+				.Concat(await TableColumnsModel.GetTableColumns(SelectedDB, SelectedTable)).ToList();
 		}
 
 		private async void AsyncLoadDBs() => DBsList = await _dbModel.GetAllDBs();
@@ -184,7 +187,10 @@ namespace Sql_Widget.ViewModels
 		{
 			get
 			{
-				return null;
+				return new ButtonsCommand((object obj) =>
+				{
+					Process.Start("Help.md");
+				});
 			}
 		}
 		public ICommand CloseCommand

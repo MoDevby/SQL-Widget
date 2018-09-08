@@ -29,6 +29,7 @@ namespace Sql_Widget.Models
 					}
 				}
 				_cachedTables.Add(dbName, tables);
+				_cachedTables[dbName].Sort((a, b) => a.CompareTo(b));
 			}
 
 			if (!_subscribedToEvent)
@@ -36,6 +37,7 @@ namespace Sql_Widget.Models
 				DBModel.DBInvalidated += (s, e) => InvalidateCache();
 				_subscribedToEvent = true;
 			}
+
 			return _cachedTables[dbName];
 		}
 

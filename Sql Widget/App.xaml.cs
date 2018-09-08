@@ -1,8 +1,5 @@
 ﻿using Sql_Widget.ViewModels;
-using System;
-using System.IO;
-using System.Linq;
-using System.Reflection;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 
@@ -13,44 +10,59 @@ namespace Sql_Widget
 	/// </summary>
 	public partial class App : Application
 	{
+		//[System.Runtime.InteropServices.DllImport("user32.dll")]
+		//private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+		//private const int SW_SHOWMAXIMIZED = 3;
+		private static Mutex _mutex = null;
+
 		private void Application_Startup(object sender, StartupEventArgs e)
 		{
-			//This is used to load the assembly from the resources instead of having it as standalone dll
-			AppDomain.CurrentDomain.AssemblyResolve += (se, args) =>
-			{
-				Assembly thisAssembly = Assembly.GetExecutingAssembly();
+			//Allow only one instance of the application
+			CheckMultipleInstances();
 
-				//Get the Name of the AssemblyFile
-				var name = args.Name.Substring(0, args.Name.IndexOf(',')) + ".dll";
+			//Force first control to have focus
+			InitiateFocus();
 
-				//Load form Embedded Resources - This Function is not called if the Assembly is in the Application Folder
-				var resources = thisAssembly.GetManifestResourceNames().Where(s => s.EndsWith(name));
-				if (resources.Any())
-				{
-					var resourceName = resources.First();
-					using (Stream stream = thisAssembly.GetManifestResourceStream(resourceName))
-					{
-						if (stream == null) return null;
-						var block = new byte[stream.Length];
-						stream.Read(block, 0, block.Length);
-						return Assembly.Load(block);
-					}
-				}
-				return null;
-			};
-
-			// Force first control to have focus
-			EventManager.RegisterClassHandler(typeof(Window), Window.LoadedEvent,
-				new RoutedEventHandler(delegate (object s, RoutedEventArgs args)
-				{
-					((Window)s).MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-				}));
-
-			// Start the main window
-			var main = new MainWindow();
-			main.DataContext = new MainWindowVM();
-			main.Show();
+			//Start the main window
+			this.MainWindow = new MainWindow();
+			this.MainWindow.DataContext = new MainWindowVM();
+			this.MainWindow.Show();
 		}
 
+		private void CheckMultipleInstances()
+		{
+			//Process currentProcess = Process.GetCurrentProcess();
+			//var runningProcess = (from process in Process.GetProcesses()
+			//					  where
+			//						process.Id != currentProcess.Id &&
+			//						process.ProcessName.Equals(
+			//						  currentProcess.ProcessName,
+			//						  StringComparison.Ordinal)
+			//					  select process).FirstOrDefault();
+			//if (runningProcess != null)
+			//{
+			//	ShowWindow(runningProcess.MainWindowHandle, SW_SHOWMAXIMIZED);
+			//	Current.Shutdown();
+			//}
+
+			const string appName = "MySqlWidget";
+			bool createdNew;
+
+			_mutex = new Mutex(true, appName, out createdNew);
+
+			if (!createdNew)
+			{
+				Current.Shutdown();
+			}
+		}
+
+		private static void InitiateFocus()
+		{
+			EventManager.RegisterClassHandler(typeof(Window), Window.LoadedEvent,
+							new RoutedEventHandler(delegate (object s, RoutedEventArgs args)
+							{
+								((Window)s).MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+							}));
+		}
 	}
 }

@@ -16,7 +16,7 @@ namespace Sql_Widget.Models
 
 		private static string _selectAllTableColumns(string table) =>
 					"SELECT ORDINAL_POSITION,COLUMN_NAME,DATA_TYPE,CHARACTER_MAXIMUM_LENGTH,NUMERIC_PRECISION,IS_NULLABLE " +
-					$" FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}'";
+					$" FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}' ORDER BY COLUMN_NAME";
 
 		private static List<TableColumn> GetFromCache(string db, string table)
 		{

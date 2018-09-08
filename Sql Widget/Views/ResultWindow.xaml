@@ -6,16 +6,19 @@
 		
 		TextElement.Foreground="{DynamicResource MaterialDesignBody}" Background="{DynamicResource MaterialDesignPaper}"
 		FontFamily="{DynamicResource MaterialDesignFont}" WindowStartupLocation="CenterScreen"
-		Title="{Binding Title,Mode=OneWay}">
+		Title="{Binding Title,Mode=OneWay}" ShowInTaskbar="False">
 	<Window.InputBindings>
-		<KeyBinding Key="F5" Command="{Binding Execute}" />
+		<KeyBinding Key="F5" Command="{Binding ExecuteCommand}" />
 	</Window.InputBindings>
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition/>
 		</Grid.RowDefinitions>
-		<TextBox HorizontalAlignment="Stretch" FontSize="20" Text="{Binding Query}" IsReadOnly="True" Margin="5" Grid.Row="0"/>
+		<DockPanel Grid.Row="0" HorizontalAlignment="Stretch"  Margin="5">
+			<TextBox HorizontalAlignment="Stretch" FontSize="20" Text="{Binding Query}" IsReadOnly="True"/>
+			<Button HorizontalAlignment="Right" Content="ReExecute" Command="{Binding ExecuteCommand}" ToolTip="(F5)"/>
+		</DockPanel>
 		<TextBlock Text="Loadding..." FontSize="30" HorizontalAlignment="Center" Visibility="{Binding Loadding,Mode=OneWay}" 
 				   Grid.Row="1" Margin="5"/>
 		<DataGrid ItemsSource="{Binding Result}" Visibility="{Binding NotLoadding,Mode=OneWay}" 

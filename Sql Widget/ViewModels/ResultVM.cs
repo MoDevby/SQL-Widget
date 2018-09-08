@@ -51,7 +51,7 @@ namespace Sql_Widget.ViewModels
 		#endregion
 
 		#region Commands
-		public ICommand Execute
+		public ICommand ExecuteCommand
 		{
 			get
 			{
