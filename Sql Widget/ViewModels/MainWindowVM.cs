@@ -37,6 +37,7 @@ namespace Sql_Widget.ViewModels
 					ResetCommand.Execute("");
 			}
 		}
+		public bool TopMost { get; set; }
 		#endregion
 		#region DB
 		public List<string> DBsList { get; set; } = new List<string>();

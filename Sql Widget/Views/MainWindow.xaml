@@ -8,7 +8,7 @@
 		WindowStyle="None" SizeToContent="WidthAndHeight" ResizeMode="NoResize"
 		FontSize="15" ShowInTaskbar="False" SizeChanged="Window_SizeChanged"
 		TextElement.Foreground="{DynamicResource MaterialDesignBody}" Background="{DynamicResource MaterialDesignPaper}"
-		FontFamily="{DynamicResource MaterialDesignFont}">
+		FontFamily="{DynamicResource MaterialDesignFont}" Topmost="{Binding TopMost}">
 	<Window.InputBindings>
 		<KeyBinding Key="F1" Command="{Binding HelpCommand}" />
 		<KeyBinding Key="F5" Command="{Binding ExecuteCommand}" />
@@ -16,9 +16,9 @@
 	</Window.InputBindings>
 	<Expander ExpandDirection="Left" Expanded="Expander_Expanded" Collapsed="Expander_Collapsed" IsExpanded="True">
 		<Expander.Header>
-			<TextBlock>
-					<materialDesign:PackIcon Kind="Database" Width="24" Height="24"/>
-			</TextBlock>
+			<ToggleButton Style="{StaticResource MaterialDesignActionToggleButton}" ToolTip="Always on Top" IsChecked="{Binding TopMost}">
+				<materialDesign:PackIcon Kind="Database" Width="24" Height="24"/>
+			</ToggleButton>
 		</Expander.Header>
 		<StackPanel>
 			<myControls:DBandTableControl x:Name="DBSelector"/>
