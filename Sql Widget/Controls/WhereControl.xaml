@@ -19,7 +19,7 @@
 					<RowDefinition/>
 				</Grid.RowDefinitions>
 
-				<ComboBox ItemsSource="{Binding DataContext.Fields,ElementName=DummyElement,Mode=OneWay}" Grid.Column="0" VerticalAlignment="Center" 
+				<ComboBox ItemsSource="{Binding DataContext.WhereFields,ElementName=DummyElement,Mode=OneWay}" Grid.Column="0" VerticalAlignment="Center" 
 						  SelectedValue="{Binding SelectedField,UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="Name" DisplayMemberPath="Name" IsEditable="True" MinWidth="100" Margin="5"
 						   materialDesign:HintAssist.Hint="Field"/>
 

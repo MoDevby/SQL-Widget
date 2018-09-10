@@ -58,20 +58,21 @@ namespace Sql_Widget.ViewModels
 			set { _selectedTable = value; IntiateFields(); }
 		}
 		public bool SelectTablesIsEnabled => TablesList.Any();
+		public List<TableColumn> Fields { get; set; } = new List<TableColumn>();
+		public bool ComponentsEnabled => Fields.Count() > 1;
 		#endregion
 		#region Query
 		public string QueryValue { get; set; }
 		public bool QueryEnabled => !string.IsNullOrWhiteSpace(SelectedDB);
 		private bool IsValidQuery => !string.IsNullOrWhiteSpace(SelectedDB) && !string.IsNullOrWhiteSpace(QueryValue);
 		#endregion
-		public List<TableColumn> Fields { get; set; } = new List<TableColumn>();
-		public bool ComponentsEnabled => Fields.Count() > 1;
 		#region Select
 		public List<TableColumn> VisibleFields => Fields.Where(x => !SelectedFields.Contains(x)).ToList();
 		public List<TableColumn> SelectedFields { get; set; } = new List<TableColumn>();
 		private bool IsValidSelect => SelectedFields.Any();
 		#endregion
 		#region Where
+		public List<TableColumn> WhereFields { get { return Fields.Where(a => a.Name != "*").ToList(); } }
 		public List<ConditionElement> Conditions { get; set; } = new List<ConditionElement> { new ConditionElement() };
 		public Dictionary<CompareOperators, string> CompareOperators { get; set; }
 		public List<RelationOperators> RelationOperators { get; set; }
@@ -125,8 +126,8 @@ namespace Sql_Widget.ViewModels
 			whereConsitions.ForEach(con =>
 			{
 				where += $"{con.SelectedField} {CompareOperators.FirstOrDefault(x => x.Key == con.SelectedOerator).Value} ";
-				where += IsStringType(con.SelectedField) && string.IsNullOrWhiteSpace(con.Value) && con.Value != "null"
-							? $"'{con.Value}'"
+				where += IsStringType(con.SelectedField) && con.Value != "null"
+							? string.IsNullOrEmpty(con.Value) ? "" : $"'{con.Value}'"
 							: string.IsNullOrWhiteSpace(con.Value) ? "null" : con.Value;
 				if (index < whereConsitions.Count() - 1)
 					where += con.NextLineOperator == 0 ? $" {RelationOperators.First()} " : $" {con.NextLineOperator} ";

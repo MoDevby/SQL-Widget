@@ -6,7 +6,7 @@
 		
 		TextElement.Foreground="{DynamicResource MaterialDesignBody}" Background="{DynamicResource MaterialDesignPaper}"
 		FontFamily="{DynamicResource MaterialDesignFont}" WindowStartupLocation="CenterScreen"
-		Title="{Binding Title,Mode=OneWay}" ShowInTaskbar="False">
+		Title="{Binding Title,Mode=OneWay}" ShowInTaskbar="False" SizeToContent="Width">
 	<Window.InputBindings>
 		<KeyBinding Key="F5" Command="{Binding ExecuteCommand}" />
 	</Window.InputBindings>
