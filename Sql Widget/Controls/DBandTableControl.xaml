@@ -27,14 +27,20 @@
 					  materialDesign:HintAssist.Hint="Select Table" Margin="5"
 					  SelectedItem="{Binding SelectedTable}" ItemsSource="{Binding TablesList,Mode=OneWay}" 
 					  IsEnabled="{Binding SelectTablesIsEnabled,Mode=OneWay}"
-					  KeyboardNavigation.TabNavigation="Local" />
+					  KeyboardNavigation.TabNavigation="Local" >
+			<ComboBox.ItemsPanel>
+				<ItemsPanelTemplate>
+					<VirtualizingStackPanel />
+				</ItemsPanelTemplate>
+			</ComboBox.ItemsPanel>
+		</ComboBox>
 
 		<DockPanel Grid.Column="4" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Stretch">
 			<Button Margin="5,0" ToolTip="Clear DBs/Tables Cache" Command="{Binding ResetCacheCommand}" IsTabStop="False"
 					Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" DockPanel.Dock="Left" HorizontalAlignment="Left">
 				<materialDesign:PackIcon Kind="Refresh" Height="24" Width="24" />
 			</Button>
-			<Button Margin="5,0" ToolTip="Help (F1)" Command="{Binding CloseCommand}" IsTabStop="False"
+			<Button Margin="5,0" ToolTip="Help (F1)" Command="{Binding HelpCommand}" IsTabStop="False"
 					Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" DockPanel.Dock="Right" HorizontalAlignment="Right">
 				<materialDesign:PackIcon Kind="Help" Height="24" Width="24"/>
 			</Button>

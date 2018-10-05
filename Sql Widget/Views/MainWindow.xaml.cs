@@ -29,7 +29,7 @@ namespace Sql_Widget
 		private void Expander_Collapsed(object sender, RoutedEventArgs e)
 		{
 			this.SizeToContent = SizeToContent.Width;
-			this.Height = 120;
+			this.Height = 135;
 		}
 
 		//private void Window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)

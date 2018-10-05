@@ -32,12 +32,12 @@ namespace Sql_Widget.ViewModels
 		{
 			_dbName = dbName;
 			Query = query.Replace(Environment.NewLine, " ");
-			PopulateResult(dbName, query);
+			PopulateResult(dbName);
 		}
 
-		private async void PopulateResult(string dbName, string query)
+		private async void PopulateResult(string dbName)
 		{
-			var result = await Task.Run(() => new QueryModel().Execute(dbName, query));
+			var result = await Task.Run(() => new QueryModel().Execute(dbName, Query));
 			Result = result.DefaultView;
 		}
 
@@ -58,7 +58,7 @@ namespace Sql_Widget.ViewModels
 				return new ButtonsCommand((object obj) =>
 				{
 					Result = null;
-					PopulateResult(_dbName, Query);
+					PopulateResult(_dbName);
 				});
 			}
 		}
