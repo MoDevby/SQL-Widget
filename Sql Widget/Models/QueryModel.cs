@@ -13,11 +13,23 @@ namespace Sql_Widget.Models
 			using (SqlConnection con = new SqlConnection(ConnectionString(dbName)))
 			{
 				//Thread.Sleep(1000);
-				SqlCommand cmd = new SqlCommand(query, con);
-				SqlDataAdapter sda = new SqlDataAdapter(cmd);
 				DataTable dt = new DataTable();
 				try
-				{ sda.Fill(dt); }
+				{
+					switch (query.Split(' ')[0].ToLower())
+					{
+						case "select":
+							SqlDataAdapter sda = new SqlDataAdapter(query, con);
+							sda.Fill(dt);
+							break;
+						default:
+							con.Open();
+							var rowCount = new SqlCommand(query, con).ExecuteNonQuery();
+							dt.Columns.Add(new DataColumn("Number of affected rows"));
+							dt.Rows.Add(rowCount);
+							break;
+					}
+				}
 				catch (Exception ex)
 				{
 					dt.Columns.Add(new DataColumn("Errors"));

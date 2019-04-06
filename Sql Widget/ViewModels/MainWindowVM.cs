@@ -275,17 +275,21 @@ namespace Sql_Widget.ViewModels
 							PopulateSelectQuery();
 							break;
 						case "History":
-							QueryValue = string.Join(Environment.NewLine, HistoryItems.Where(x => x.Selected).Select(x => x.Query));
+							QueryValue = string.Join(';' + Environment.NewLine, HistoryItems.Where(x => x.Selected).Select(x => x.Query));
 							break;
 						default:
 							break;
 					}
 					if (!IsValidQuery) return;
-					var newResult = new ResultWindow();
-					var vm = new ResultVM(SelectedDB, QueryValue);
-					newResult.DataContext = vm;
-					newResult.Show();
-					AddToHistory(SelectedDB, QueryValue, vm);
+
+					foreach (string query in QueryValue.Split(';').Where(x => !string.IsNullOrWhiteSpace(x)))
+					{
+						var newResult = new ResultWindow();
+						var vm = new ResultVM(SelectedDB, query);
+						newResult.DataContext = vm;
+						newResult.Show();
+						AddToHistory(SelectedDB, query, vm);
+					}
 				});
 			}
 		}
