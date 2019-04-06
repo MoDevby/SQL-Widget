@@ -1,4 +1,4 @@
-﻿namespace Sql_Widget.Classes
+﻿namespace Sql_Widget.Entities
 {
 	class HistoryItem
 	{
@@ -7,5 +7,6 @@
 		public string Query { get; set; }
 		public int RowCount { get; set; }
 		public bool Succeeded { get; set; }
+		public bool Selected { get; set; }
 	}
 }

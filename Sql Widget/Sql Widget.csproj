@@ -75,25 +75,28 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Controls\ButtonsControl.xaml.cs">
+    <Compile Include="Views\Controls\ButtonsControl.xaml.cs">
       <DependentUpon>ButtonsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\HistoryControl.xaml.cs">
+    <Compile Include="Views\Controls\FavoriteControl.xaml.cs">
+      <DependentUpon>FavoriteControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controls\HistoryControl.xaml.cs">
       <DependentUpon>HistoryControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\SelectControl.xaml.cs">
+    <Compile Include="Views\Controls\SelectControl.xaml.cs">
       <DependentUpon>SelectControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\WhereControl.xaml.cs">
+    <Compile Include="Views\Controls\WhereControl.xaml.cs">
       <DependentUpon>WhereControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helper\ButtonsCommand.cs" />
-    <Compile Include="Classes\ConditionElement.cs" />
+    <Compile Include="Entities\ConditionElement.cs" />
     <Compile Include="Helper\Converters.cs" />
     <Compile Include="Helper\Enums.cs" />
-    <Compile Include="Classes\HistoryItem.cs" />
+    <Compile Include="Entities\HistoryItem.cs" />
     <Compile Include="Models\OperatorsModel.cs" />
-    <Compile Include="Classes\TableColumn.cs" />
+    <Compile Include="Entities\TableColumn.cs" />
     <Compile Include="Models\DBModel.cs" />
     <Compile Include="Models\QueryModel.cs" />
     <Compile Include="Models\TableColumnsModel.cs" />
@@ -103,23 +106,27 @@
     </Compile>
     <Compile Include="ViewModels\MainWindowVM.cs" />
     <Compile Include="ViewModels\ResultVM.cs" />
-    <Page Include="Controls\ButtonsControl.xaml">
+    <Page Include="Views\Controls\ButtonsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\DBandTableControl.xaml">
+    <Page Include="Views\Controls\DBandTableControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\HistoryControl.xaml">
+    <Page Include="Views\Controls\FavoriteControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\SelectControl.xaml">
+    <Page Include="Views\Controls\HistoryControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\WhereControl.xaml">
+    <Page Include="Views\Controls\SelectControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Controls\WhereControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -131,7 +138,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Controls\DBandTableControl.xaml.cs">
+    <Compile Include="Views\Controls\DBandTableControl.xaml.cs">
       <DependentUpon>DBandTableControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">

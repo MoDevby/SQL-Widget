@@ -1,6 +1,6 @@
 ﻿using Sql_Widget.Helper;
 
-namespace Sql_Widget.Classes
+namespace Sql_Widget.Entities
 {
 	class ConditionElement
 	{

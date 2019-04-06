@@ -1,4 +1,4 @@
-﻿using Sql_Widget.Classes;
+﻿using Sql_Widget.Entities;
 using Sql_Widget.Helper;
 using Sql_Widget.Models;
 using System;
@@ -13,7 +13,7 @@ using System.Windows.Input;
 
 namespace Sql_Widget.ViewModels
 {
-	class MainWindowVM : INotifyPropertyChanged
+	class MainWindowVM : Window, INotifyPropertyChanged
 	{
 #pragma warning disable 0067
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -38,6 +38,7 @@ namespace Sql_Widget.ViewModels
 			}
 		}
 		public bool TopMost { get; set; }
+		public bool VisibleInTaskbar { get { return !TopMost; } }
 		#endregion
 		#region DB
 		public List<string> DBsList { get; set; } = new List<string>();
@@ -79,7 +80,7 @@ namespace Sql_Widget.ViewModels
 		#endregion
 		#region History
 		public List<HistoryItem> HistoryItems { get; set; } = new List<HistoryItem>();
-		public HistoryItem SelectedHistoryElement { get; set; }
+		//public HistoryItem SelectedHistoryElement { get; set; }
 		#endregion
 		#endregion
 
@@ -203,6 +204,9 @@ namespace Sql_Widget.ViewModels
 				{
 					var window = (Window)obj;
 					window.Close();
+					if (Application.Current == null) return;
+					Application.Current.Shutdown();
+					//Environment.Exit(1);
 				});
 			}
 		}
@@ -272,8 +276,10 @@ namespace Sql_Widget.ViewModels
 							PopulateSelectQuery();
 							break;
 						case "History":
-							if (SelectedHistoryElement == null) return;
-							QueryValue = SelectedHistoryElement.Query;
+							//if (SelectedHistoryElement == null) return;
+							//QueryValue = SelectedHistoryElement.Query;
+							if (!HistoryItems.Any(x => x.Selected)) return;
+							QueryValue = string.Join("\n", HistoryItems.Where(x => x.Selected).Select(x => x.Query));
 							break;
 						default:
 							break;
