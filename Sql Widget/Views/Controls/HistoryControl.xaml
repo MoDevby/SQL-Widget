@@ -16,34 +16,34 @@
 			</Style.Resources>
 		</Style>
 		<DataTemplate x:Key="HistoryElement">
-			<Grid Margin="5" VerticalAlignment="Center" Style="{StaticResource MyGridStyle}">
+			<Grid Margin="5" Style="{StaticResource MyGridStyle}">
 				<Grid.RowDefinitions>
 					<RowDefinition/>
 					<RowDefinition/>
 				</Grid.RowDefinitions>
-
-				<StackPanel Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Stretch" Orientation="Horizontal" Margin="5,0">
-					<TextBlock Text="DB: " />
+								
+				<StackPanel Grid.Row="0" HorizontalAlignment="Stretch" Orientation="Horizontal" Margin="5,0">
+					<TextBlock Text="DB: " HorizontalAlignment="Right" />
 					<TextBlock Text="{Binding DBName}" />
 					<Separator  Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
 
 					<TextBlock Text="{Binding RowCount}" />
-					<TextBlock Text=" Rows"/>
+					<TextBlock Text=" Rows" HorizontalAlignment="Left" />
 					<Separator  Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
 
 					<TextBlock Text="{Binding Date}"/>
-					<Separator  Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
 				</StackPanel>
 
-				<DockPanel Grid.Row="1" HorizontalAlignment="Stretch" Margin="5,0" VerticalAlignment="Center">
-					<TextBox HorizontalAlignment="Left" TextWrapping="Wrap" IsReadOnly="True" MaxWidth="500"
-							 Text="{Binding Query}"/>
-					<CheckBox HorizontalAlignment="Right" ToolTip="Select to execute" IsChecked="{Binding Selected, Mode=OneWayToSource}"/>
+				<DockPanel Grid.Row="1" HorizontalAlignment="Stretch" Margin="5,0">
+					<CheckBox DockPanel.Dock="Right" HorizontalAlignment="Right" IsChecked="{Binding Selected,Mode=OneWayToSource}"
+							ToolTip="Select to execute"/>
+					<TextBox DockPanel.Dock="Left" HorizontalAlignment="Left" TextWrapping="Wrap"
+						   Text="{Binding Query}" IsReadOnly="True" MaxWidth="500"/>
 				</DockPanel>
 			</Grid>
 		</DataTemplate>
-
 	</UserControl.Resources>
-	<ListBox Margin="5" HorizontalAlignment="Stretch"  ItemTemplate="{StaticResource HistoryElement}" ItemsSource="{Binding HistoryItems}"/>
+
+	<ListBox Margin="5" ItemTemplate="{StaticResource HistoryElement}" ItemsSource="{Binding HistoryItems}"/>
 	<!--SelectedItem="{Binding SelectedHistoryElement,Mode=OneWayToSource}">-->
 </UserControl>
