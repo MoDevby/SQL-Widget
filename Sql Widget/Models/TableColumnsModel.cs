@@ -8,17 +8,13 @@ namespace Sql_Widget.Models
 {
 	public class TableColumnsModel
 	{
-		private static bool _subscribedToEvent;
-
 		private static Dictionary<string, List<TableColumn>> _cachedColumns = new Dictionary<string, List<TableColumn>>();
 
-		public static Task<List<TableColumn>> GetTableColumns(string db, string table) => Task.Run(() => GetFromCache(db, table));
+		public static void InvalidateCache() => _cachedColumns = new Dictionary<string, List<TableColumn>>();
 
-		private static string _selectAllTableColumns(string table) =>
-					"SELECT ORDINAL_POSITION,COLUMN_NAME,DATA_TYPE,CHARACTER_MAXIMUM_LENGTH,NUMERIC_PRECISION,IS_NULLABLE " +
-					$" FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}' ORDER BY COLUMN_NAME";
+		public static Task<List<TableColumn>> GetTableColumns(string db, string table) => Task.Run(() => GetColumnsFromCache(db, table));
 
-		private static List<TableColumn> GetFromCache(string db, string table)
+		private static List<TableColumn> GetColumnsFromCache(string db, string table)
 		{
 			if (string.IsNullOrWhiteSpace(table) || string.IsNullOrWhiteSpace(db))
 				return new List<TableColumn>();
@@ -28,7 +24,7 @@ namespace Sql_Widget.Models
 				using (SqlConnection con = new SqlConnection(QueryModel.ConnectionString(db)))
 				{
 					con.Open();
-					using (SqlCommand cmd = new SqlCommand(_selectAllTableColumns(table), con))
+					using (SqlCommand cmd = new SqlCommand(GetAllTableColumnsQuery(table), con))
 					{
 						using (IDataReader dr = cmd.ExecuteReader())
 							while (dr.Read())
@@ -45,14 +41,11 @@ namespace Sql_Widget.Models
 				}
 				_cachedColumns.Add(table, columns);
 			}
-			if (!_subscribedToEvent)
-			{
-				DBModel.DBInvalidated += (s, e) => InvalidateCache();
-				_subscribedToEvent = true;
-			}
 			return _cachedColumns[table];
 		}
 
-		public static void InvalidateCache() => _cachedColumns = new Dictionary<string, List<TableColumn>>();
+		private static string GetAllTableColumnsQuery(string table) =>
+			"SELECT ORDINAL_POSITION,COLUMN_NAME,DATA_TYPE,CHARACTER_MAXIMUM_LENGTH,NUMERIC_PRECISION,IS_NULLABLE " +
+			$" FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}' ORDER BY COLUMN_NAME";
 	}
 }

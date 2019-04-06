@@ -7,12 +7,13 @@ namespace Sql_Widget.Models
 {
 	public class TablesModel
 	{
-		private bool _subscribedToEvent;
-		private Dictionary<string, List<string>> _cachedTables = new Dictionary<string, List<string>>();
+		private static Dictionary<string, List<string>> _cachedTables = new Dictionary<string, List<string>>();
 
-		public Task<List<string>> GetAllTables(string dbName) => Task.Run(() => GetFromCache(dbName));
+		public static void InvalidateCache() => _cachedTables = new Dictionary<string, List<string>>();
 
-		private List<string> GetFromCache(string dbName)
+		public static Task<List<string>> GetAllTables(string dbName) => Task.Run(() => GetTablesFromCache(dbName));
+
+		private static List<string> GetTablesFromCache(string dbName)
 		{
 			if (string.IsNullOrWhiteSpace(dbName))
 				return new List<string>();
@@ -32,15 +33,7 @@ namespace Sql_Widget.Models
 				_cachedTables[dbName].Sort((a, b) => a.CompareTo(b));
 			}
 
-			if (!_subscribedToEvent)
-			{
-				DBModel.DBInvalidated += (s, e) => InvalidateCache();
-				_subscribedToEvent = true;
-			}
-
 			return _cachedTables[dbName];
 		}
-
-		public void InvalidateCache() => _cachedTables = new Dictionary<string, List<string>>();
 	}
 }

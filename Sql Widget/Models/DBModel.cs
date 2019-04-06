@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -10,10 +9,15 @@ namespace Sql_Widget.Models
 	public class DBModel
 	{
 		private const string _dbName = "master";
-		private const string _selectAllDBsString =
-			"SELECT name FROM sys.databases WHERE name NOT IN ('master', 'model', 'tempdb', 'msdb')";
-
+		private const string _selectAllDBsString = "SELECT name FROM sys.databases WHERE name NOT IN ('master', 'model', 'tempdb', 'msdb')";
 		private List<string> _cachedDBs = new List<string>();
+
+		public void InvalidateCache()
+		{
+			_cachedDBs = new List<string>();
+			TablesModel.InvalidateCache();
+			TableColumnsModel.InvalidateCache();
+		}
 
 		public Task<List<string>> GetAllDBs() => Task.Run(() => GetDbs());
 
@@ -32,9 +36,5 @@ namespace Sql_Widget.Models
 				}
 			return _cachedDBs;
 		}
-
-		public void InvalidateCache() { _cachedDBs = new List<string>(); DBInvalidated(null, EventArgs.Empty); }
-		public static event EventHandler DBInvalidated = delegate { };
-
 	}
 }

@@ -21,7 +21,6 @@ namespace Sql_Widget.ViewModels
 		private string[] _excludedFromReset = { "Query", "History" };
 		private string _selectedDB;
 		private string _selectedTable;
-		private TablesModel _tableModel = new TablesModel();
 		private DBModel _dbModel = new DBModel();
 		private TabItem _selectedTab;
 
@@ -106,14 +105,14 @@ namespace Sql_Widget.ViewModels
 
 		private async void AsyncUpdateTables() => TablesList = string.IsNullOrWhiteSpace(_selectedDB)
 			? new List<string>()
-			: await _tableModel.GetAllTables(SelectedDB);
+			: await TablesModel.GetAllTables(SelectedDB);
 
 		private void PopulateSelectQuery()
 		{
 			if (!IsValidSelect) return;
 			QueryValue = string.Empty;
 			var fields = string.Join(", ", SelectedFields.Select(x => x.Name));
-			QueryValue = $"SELECT {fields}\nFROM {SelectedTable}";
+			QueryValue = $"SELECT {fields}{Environment.NewLine}FROM {SelectedTable}";
 
 			var whereConsitions = Conditions.Where(x => x.SelectedField != "" && x.SelectedOerator != 0);
 			QueryValue += ConstructWhereClause(whereConsitions.ToList());
@@ -122,7 +121,7 @@ namespace Sql_Widget.ViewModels
 		private string ConstructWhereClause(List<ConditionElement> whereConsitions)
 		{
 			if (!whereConsitions.Any()) return null;
-			var where = "\nWhere ";
+			var where = Environment.NewLine + "Where ";
 			var index = 0;
 			whereConsitions.ForEach(con =>
 			{
@@ -276,10 +275,7 @@ namespace Sql_Widget.ViewModels
 							PopulateSelectQuery();
 							break;
 						case "History":
-							//if (SelectedHistoryElement == null) return;
-							//QueryValue = SelectedHistoryElement.Query;
-							if (!HistoryItems.Any(x => x.Selected)) return;
-							QueryValue = string.Join("\n", HistoryItems.Where(x => x.Selected).Select(x => x.Query));
+							QueryValue = string.Join(Environment.NewLine, HistoryItems.Where(x => x.Selected).Select(x => x.Query));
 							break;
 						default:
 							break;

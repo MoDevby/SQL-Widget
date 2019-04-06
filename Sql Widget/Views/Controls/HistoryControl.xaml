@@ -34,10 +34,10 @@
 					<TextBlock Text="{Binding Date}"/>
 				</StackPanel>
 
-				<DockPanel Grid.Row="1" HorizontalAlignment="Stretch" Margin="5,0">
-					<CheckBox DockPanel.Dock="Right" HorizontalAlignment="Right" IsChecked="{Binding Selected,Mode=OneWayToSource}"
-							ToolTip="Select to execute"/>
-					<TextBox DockPanel.Dock="Left" HorizontalAlignment="Left" TextWrapping="Wrap"
+				<DockPanel Grid.Row="1" HorizontalAlignment="Stretch" >
+					<CheckBox HorizontalAlignment="Left" IsChecked="{Binding Selected,Mode=OneWayToSource}"
+							ToolTip="Select to execute" VerticalAlignment="Center"/>
+					<TextBox HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="5,0"
 						   Text="{Binding Query}" IsReadOnly="True" MaxWidth="500"/>
 				</DockPanel>
 			</Grid>
@@ -45,5 +45,4 @@
 	</UserControl.Resources>
 
 	<ListBox Margin="5" ItemTemplate="{StaticResource HistoryElement}" ItemsSource="{Binding HistoryItems}"/>
-	<!--SelectedItem="{Binding SelectedHistoryElement,Mode=OneWayToSource}">-->
 </UserControl>

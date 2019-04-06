@@ -15,9 +15,9 @@
 			<RowDefinition Height="Auto"/>
 			<RowDefinition/>
 		</Grid.RowDefinitions>
-		<DockPanel Grid.Row="0" HorizontalAlignment="Stretch"  Margin="5">
-			<TextBox HorizontalAlignment="Stretch" FontSize="20" Text="{Binding Query}" IsReadOnly="True"/>
-			<Button HorizontalAlignment="Right" Content="ReExecute" Command="{Binding ExecuteCommand}" ToolTip="(F5)"/>
+		<DockPanel Grid.Row="0" HorizontalAlignment="Stretch" Margin="5">
+			<Button  DockPanel.Dock="Right" HorizontalAlignment="Right" Content="ReExecute" Command="{Binding ExecuteCommand}" ToolTip="(F5)" Margin="5,0"/>
+			<TextBox DockPanel.Dock="Left" HorizontalAlignment="Stretch" FontSize="20" Text="{Binding Query}" IsReadOnly="True" TextWrapping="Wrap"/>
 		</DockPanel>
 		<TextBlock Text="Loadding..." FontSize="30" HorizontalAlignment="Center" Visibility="{Binding Loadding,Mode=OneWay}" 
 				   Grid.Row="1" Margin="5"/>
