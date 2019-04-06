@@ -16,34 +16,38 @@
 			</Style.Resources>
 		</Style>
 		<DataTemplate x:Key="HistoryElement">
-			<Grid Margin="5" VerticalAlignment="Center" Style="{StaticResource MyGridStyle}">
+			<Grid Margin="5" VerticalAlignment="Center"  HorizontalAlignment="Stretch" Style="{StaticResource MyGridStyle}">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="Auto"/>
+				</Grid.ColumnDefinitions>
 				<Grid.RowDefinitions>
 					<RowDefinition/>
 					<RowDefinition/>
 				</Grid.RowDefinitions>
-
-				<StackPanel Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Stretch" Orientation="Horizontal" Margin="5,0">
-					<TextBlock Text="DB: " />
-					<TextBlock Text="{Binding DBName}" />
-					<Separator  Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
-
-					<TextBlock Text="{Binding RowCount}" />
-					<TextBlock Text=" Rows"/>
-					<Separator  Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
-
-					<TextBlock Text="{Binding Date}"/>
+				<StackPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Orientation="Horizontal" Margin="5,0">
+					<TextBlock Text="{Binding Date}" VerticalAlignment="Center" />
 					<Separator  Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
 				</StackPanel>
+				<StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Right" Orientation="Horizontal" Margin="5,0">
+					<TextBlock Text="DB: " VerticalAlignment="Center" HorizontalAlignment="Right" />
+					<TextBlock Text="{Binding DBName}" VerticalAlignment="Center"/>
+					<Separator  Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+				</StackPanel>
+				<StackPanel Grid.Column="2" Grid.Row="0" HorizontalAlignment="Stretch" Orientation="Horizontal" Margin="5,0">
+					<TextBlock Text="{Binding RowCount}" VerticalAlignment="Center" />
+					<TextBlock Text=" Rows" VerticalAlignment="Center" HorizontalAlignment="Left" />
+				</StackPanel>
 
-				<DockPanel Grid.Row="1" HorizontalAlignment="Stretch" Margin="5,0" VerticalAlignment="Center">
-					<TextBox HorizontalAlignment="Left" TextWrapping="Wrap" IsReadOnly="True" MaxWidth="500"
-							 Text="{Binding Query}"/>
-					<CheckBox HorizontalAlignment="Right" ToolTip="Select to execute" IsChecked="{Binding Selected, Mode=OneWayToSource}"/>
-				</DockPanel>
+				<TextBox Grid.ColumnSpan="3" Grid.Row="1" HorizontalAlignment="Left" TextWrapping="Wrap"
+						   Text="{Binding Query}" Margin="5" IsReadOnly="True" MaxWidth="500"/>
 			</Grid>
 		</DataTemplate>
 
 	</UserControl.Resources>
-	<ListBox Margin="5" HorizontalAlignment="Stretch"  ItemTemplate="{StaticResource HistoryElement}" ItemsSource="{Binding HistoryItems}"/>
-	<!--SelectedItem="{Binding SelectedHistoryElement,Mode=OneWayToSource}">-->
+	<ListBox Margin="5" ItemTemplate="{StaticResource HistoryElement}" ItemsSource="{Binding HistoryItems}"
+			 SelectedItem="{Binding SelectedHistoryElement,Mode=OneWayToSource}">
+
+	</ListBox>
 </UserControl>

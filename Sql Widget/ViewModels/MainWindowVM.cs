@@ -288,6 +288,7 @@ namespace Sql_Widget.ViewModels
 					var newResult = new ResultWindow();
 					var vm = new ResultVM(SelectedDB, QueryValue);
 					newResult.DataContext = vm;
+					newResult.Owner = this;
 					newResult.Show();
 					AddToHistory(SelectedDB, QueryValue, vm);
 				});
