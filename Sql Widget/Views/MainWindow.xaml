@@ -5,7 +5,7 @@
 		xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
 		xmlns:myControls="clr-namespace:Sql_Widget.Controls"
 		
-		SizeToContent="WidthAndHeight" ResizeMode="NoResize" FontSize="15" ShowInTaskbar="False"
+		SizeToContent="WidthAndHeight" ResizeMode="NoResize" FontSize="15" ShowInTaskbar="{Binding VisibleInTaskbar}"
 		WindowStyle="None" AllowsTransparency="True" Background="Transparent"
 		SizeChanged="Window_SizeChanged"
 		TextElement.Foreground="{DynamicResource MaterialDesignBody}" 
@@ -37,12 +37,14 @@
 						</StackPanel>
 					</TabItem>
 					<!--<TabItem Header="UPDATE" IsTabStop="False" Visibility="Collapsed" />
-				<TabItem Header="INSERT" IsTabStop="False" Visibility="Collapsed"/>
-				<TabItem Header="DELETE" IsTabStop="False" Visibility="Collapsed"/>-->
+						<TabItem Header="INSERT" IsTabStop="False" Visibility="Collapsed"/>
+						<TabItem Header="DELETE" IsTabStop="False" Visibility="Collapsed"/>-->
 					<TabItem Header="History" IsTabStop="False">
 						<myControls:HistoryControl Height="300"/>
 					</TabItem>
-					<!--<TabItem Header="Favorite" IsTabStop="False" Visibility="Collapsed"/>-->
+					<!--<TabItem Header="Favorite" IsTabStop="False" >
+						<myControls:FavoriteControl Height="300"/>
+					</TabItem>-->
 				</TabControl>
 				<myControls:ButtonsControl/>
 			</StackPanel>

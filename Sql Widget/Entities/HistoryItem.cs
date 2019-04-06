@@ -1,4 +1,4 @@
-﻿namespace Sql_Widget.Classes
+﻿namespace Sql_Widget.Entities
 {
 	class HistoryItem
 	{

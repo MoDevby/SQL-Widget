@@ -1,4 +1,4 @@
-﻿using Sql_Widget.Classes;
+﻿using Sql_Widget.Entities;
 using Sql_Widget.Helper;
 using Sql_Widget.Models;
 using System;
@@ -13,7 +13,7 @@ using System.Windows.Input;
 
 namespace Sql_Widget.ViewModels
 {
-	class MainWindowVM : INotifyPropertyChanged
+	class MainWindowVM : Window, INotifyPropertyChanged
 	{
 #pragma warning disable 0067
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -38,6 +38,7 @@ namespace Sql_Widget.ViewModels
 			}
 		}
 		public bool TopMost { get; set; }
+		public bool VisibleInTaskbar { get { return !TopMost; } }
 		#endregion
 		#region DB
 		public List<string> DBsList { get; set; } = new List<string>();
@@ -282,6 +283,7 @@ namespace Sql_Widget.ViewModels
 					var newResult = new ResultWindow();
 					var vm = new ResultVM(SelectedDB, QueryValue);
 					newResult.DataContext = vm;
+					newResult.Owner = this;
 					newResult.Show();
 					AddToHistory(SelectedDB, QueryValue, vm);
 				});

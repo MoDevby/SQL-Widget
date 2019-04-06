@@ -1,4 +1,4 @@
-﻿using Sql_Widget.Classes;
+﻿using Sql_Widget.Entities;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
