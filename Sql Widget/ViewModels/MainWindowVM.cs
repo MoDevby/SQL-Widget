@@ -69,7 +69,6 @@ namespace Sql_Widget.ViewModels
 		#endregion
 		#region History
 		public List<HistoryItem> HistoryItems { get; set; } = new List<HistoryItem>();
-		//public HistoryItem SelectedHistoryElement { get; set; }
 		#endregion
 		#endregion
 
@@ -214,10 +213,8 @@ namespace Sql_Widget.ViewModels
 					foreach (TableColumn item in list.SelectedItems)
 					{
 						SelectedFields.Add(item);
-						//Fields.Remove(item);
 					}
 					SelectedFields = new List<TableColumn>(SelectedFields);
-					//Fields = new List<TableColumn>(Fields);
 				});
 			}
 		}
@@ -230,17 +227,14 @@ namespace Sql_Widget.ViewModels
 					var list = (ListBox)obj;
 					foreach (TableColumn item in list.SelectedItems)
 					{
-						//Fields.Add(item);
 						SelectedFields.Remove(item);
 					}
-					//Fields = new List<TableColumn>(Fields);
 					SelectedFields = new List<TableColumn>(SelectedFields);
 				});
 			}
 		}
 		#endregion
 		#region Where
-		//[AlsoNotifyFor("Conditions")]
 		public ICommand AddConditionCommand
 		{
 			get
@@ -304,6 +298,7 @@ namespace Sql_Widget.ViewModels
 							break;
 						case "History":
 							HistoryItems.ForEach(x => x.Selected = false);
+							HistoryItems = new List<HistoryItem>(HistoryItems);
 							break;
 						default:
 							break;

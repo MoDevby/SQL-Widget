@@ -75,9 +75,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Views\Controls\ButtonsControl.xaml.cs">
-      <DependentUpon>ButtonsControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Controls\FavoriteControl.xaml.cs">
       <DependentUpon>FavoriteControl.xaml</DependentUpon>
     </Compile>
@@ -106,10 +103,6 @@
     </Compile>
     <Compile Include="ViewModels\MainWindowVM.cs" />
     <Compile Include="ViewModels\ResultVM.cs" />
-    <Page Include="Views\Controls\ButtonsControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\Controls\DBandTableControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
