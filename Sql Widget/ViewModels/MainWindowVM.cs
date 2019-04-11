@@ -97,30 +97,33 @@ namespace Sql_Widget.ViewModels
 			? new List<string>()
 			: await TablesModel.GetAllTables(SelectedDB);
 
-		private void PopulateSelectQuery()
+		private string GetSelectQuery()
 		{
-			ExecutableQuery = string.Empty;
-			if (!IsValidSelect) return;
-			var fields = string.Join(", ", SelectedFields.Select(x => x.Name));
-			ExecutableQuery = $"SELECT {fields}{Environment.NewLine}FROM {SelectedTable}";
+			var Query = string.Empty;
+			if (IsValidSelect)
+			{
+				var fields = string.Join(", ", SelectedFields.Select(x => x.Name));
+				Query = $"SELECT {fields}{Environment.NewLine}FROM {SelectedTable}";
 
-			var whereConsitions = Conditions.Where(x => x.SelectedField != "" && x.SelectedOerator != 0);
-			ExecutableQuery += ConstructWhereClause(whereConsitions);
+				var whereConditions = Conditions.Where(x => x.SelectedField != "" && x.SelectedOerator != 0);
+				Query += ConstructWhereClause(whereConditions);
+			}
+			return Query;
 		}
 
-		private string ConstructWhereClause(IEnumerable<ConditionElement> whereConsitions)
+		private string ConstructWhereClause(IEnumerable<ConditionElement> whereConditions)
 		{
-			if (!whereConsitions.Any()) return null;
+			if (!whereConditions.Any()) return null;
 			var where = Environment.NewLine + "Where ";
 			var index = 0;
-			whereConsitions.ToList().ForEach(con =>
+			whereConditions.ToList().ForEach(condition =>
 			{
-				where += $"{con.SelectedField} {CompareOperators.FirstOrDefault(x => x.Key == con.SelectedOerator).Value} ";
-				where += IsStringType(con.SelectedField) && con.Value != "null"
-							? string.IsNullOrEmpty(con.Value) ? "" : $"'{con.Value}'"
-							: string.IsNullOrWhiteSpace(con.Value) ? "null" : con.Value;
-				if (index < whereConsitions.Count() - 1)
-					where += con.NextLineOperator == 0 ? $" {RelationOperators.First()} " : $" {con.NextLineOperator} ";
+				where += condition.SelectedField + CompareOperators.First(x => x.Key == condition.SelectedOerator).Value;
+				where += IsStringType(condition.SelectedField) && condition.Value != "null"
+							? string.IsNullOrEmpty(condition.Value) ? "" : $"'{condition.Value}'"
+							: string.IsNullOrWhiteSpace(condition.Value) ? "null" : condition.Value;
+				if (index < whereConditions.Count() - 1)
+					where += condition.NextLineOperator == 0 ? $" {RelationOperators.First()} " : $" {condition.NextLineOperator} ";
 				index++;
 			});
 			return where;
@@ -263,7 +266,7 @@ namespace Sql_Widget.ViewModels
 							ExecutableQuery = QueryContent;
 							break;
 						case "SELECT":
-							PopulateSelectQuery();
+							ExecutableQuery = GetSelectQuery();
 							break;
 						case "History":
 							ExecutableQuery = string.Join(";", HistoryItems.Where(x => x.Selected).Select(x => x.Query));
@@ -272,7 +275,6 @@ namespace Sql_Widget.ViewModels
 							break;
 					}
 					if (!IsValidExecutableQuery) return;
-
 					foreach (string query in ExecutableQuery.Split(';').Where(x => !string.IsNullOrWhiteSpace(x)))
 					{
 						var newResult = new ResultWindow();
@@ -285,16 +287,27 @@ namespace Sql_Widget.ViewModels
 			}
 		}
 
-		public ICommand ResetCommand
+		public ICommand ClearCommand
 		{
 			get
 			{
 				return new ButtonsCommand((object obj) =>
 				{
-					SelectedFields = new List<TableColumn>();
-					Conditions = new List<ConditionElement> { new ConditionElement() };
-					QueryContent = string.Empty;
-					ExecutableQuery = string.Empty;
+					switch (SelectedTab.Header.ToString())
+					{
+						case "Query":
+							QueryContent = string.Empty;
+							break;
+						case "SELECT":
+							SelectedFields = new List<TableColumn>();
+							Conditions = new List<ConditionElement> { new ConditionElement() };
+							break;
+						case "History":
+							HistoryItems.ForEach(x => x.Selected = false);
+							break;
+						default:
+							break;
+					}
 				});
 			}
 		}
