@@ -18,7 +18,8 @@ namespace Sql_Widget.Models
 		{
 			if (string.IsNullOrWhiteSpace(table) || string.IsNullOrWhiteSpace(db))
 				return new List<TableColumn>();
-			if (!_cachedColumns.ContainsKey(table))
+			var key = db + "_" + table;
+			if (!_cachedColumns.ContainsKey(key))
 			{
 				List<TableColumn> columns = new List<TableColumn>();
 				using (SqlConnection con = new SqlConnection(QueryModel.ConnectionString(db)))
@@ -39,9 +40,9 @@ namespace Sql_Widget.Models
 								});
 					}
 				}
-				_cachedColumns.Add(table, columns);
+				_cachedColumns.Add(key, columns);
 			}
-			return _cachedColumns[table];
+			return _cachedColumns[key];
 		}
 
 		private static string GetAllTableColumnsQuery(string table) =>

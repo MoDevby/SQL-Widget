@@ -19,7 +19,7 @@ namespace Sql_Widget.Models
 					switch (query.Split(' ')[0].ToLower())
 					{
 						case "select":
-							SqlDataAdapter sda = new SqlDataAdapter(query, con);
+							var sda = new SqlDataAdapter(query, con);
 							sda.Fill(dt);
 							break;
 						default:
