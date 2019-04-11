@@ -18,24 +18,13 @@ namespace Sql_Widget.ViewModels
 #pragma warning disable 0067
 		public event PropertyChangedEventHandler PropertyChanged;
 #pragma warning restore 0067
-		private string[] _excludedFromReset = { "Query", "History" };
 		private string _selectedDB;
 		private string _selectedTable;
 		private DBModel _dbModel = new DBModel();
-		private TabItem _selectedTab;
 
 		#region Properties
 		#region Window
-		public TabItem SelectedTab
-		{
-			get { return _selectedTab; }
-			set
-			{
-				_selectedTab = value;
-				if (!_excludedFromReset.Contains(value.Header.ToString()))
-					ResetCommand.Execute("");
-			}
-		}
+		public TabItem SelectedTab { get; set; }
 		public bool TopMost { get; set; }
 		public bool VisibleInTaskbar { get { return !TopMost; } }
 		#endregion
@@ -62,9 +51,10 @@ namespace Sql_Widget.ViewModels
 		public bool ComponentsEnabled => Fields.Count() > 1;
 		#endregion
 		#region Query
-		public string QueryValue { get; set; }
+		public string QueryContent { get; set; }
+		public string ExecutableQuery { get; set; }
 		public bool QueryEnabled => !string.IsNullOrWhiteSpace(SelectedDB);
-		private bool IsValidQuery => !string.IsNullOrWhiteSpace(SelectedDB) && !string.IsNullOrWhiteSpace(QueryValue);
+		private bool IsValidExecutableQuery => !string.IsNullOrWhiteSpace(SelectedDB) && !string.IsNullOrWhiteSpace(ExecutableQuery);
 		#endregion
 		#region Select
 		public List<TableColumn> VisibleFields => Fields.Where(x => !SelectedFields.Contains(x)).ToList();
@@ -109,21 +99,21 @@ namespace Sql_Widget.ViewModels
 
 		private void PopulateSelectQuery()
 		{
+			ExecutableQuery = string.Empty;
 			if (!IsValidSelect) return;
-			QueryValue = string.Empty;
 			var fields = string.Join(", ", SelectedFields.Select(x => x.Name));
-			QueryValue = $"SELECT {fields}{Environment.NewLine}FROM {SelectedTable}";
+			ExecutableQuery = $"SELECT {fields}{Environment.NewLine}FROM {SelectedTable}";
 
 			var whereConsitions = Conditions.Where(x => x.SelectedField != "" && x.SelectedOerator != 0);
-			QueryValue += ConstructWhereClause(whereConsitions.ToList());
+			ExecutableQuery += ConstructWhereClause(whereConsitions);
 		}
 
-		private string ConstructWhereClause(List<ConditionElement> whereConsitions)
+		private string ConstructWhereClause(IEnumerable<ConditionElement> whereConsitions)
 		{
 			if (!whereConsitions.Any()) return null;
 			var where = Environment.NewLine + "Where ";
 			var index = 0;
-			whereConsitions.ForEach(con =>
+			whereConsitions.ToList().ForEach(con =>
 			{
 				where += $"{con.SelectedField} {CompareOperators.FirstOrDefault(x => x.Key == con.SelectedOerator).Value} ";
 				where += IsStringType(con.SelectedField) && con.Value != "null"
@@ -270,19 +260,20 @@ namespace Sql_Widget.ViewModels
 					switch (SelectedTab.Header.ToString())
 					{
 						case "Query":
+							ExecutableQuery = QueryContent;
 							break;
 						case "SELECT":
 							PopulateSelectQuery();
 							break;
 						case "History":
-							QueryValue = string.Join(';' + Environment.NewLine, HistoryItems.Where(x => x.Selected).Select(x => x.Query));
+							ExecutableQuery = string.Join(";", HistoryItems.Where(x => x.Selected).Select(x => x.Query));
 							break;
 						default:
 							break;
 					}
-					if (!IsValidQuery) return;
+					if (!IsValidExecutableQuery) return;
 
-					foreach (string query in QueryValue.Split(';').Where(x => !string.IsNullOrWhiteSpace(x)))
+					foreach (string query in ExecutableQuery.Split(';').Where(x => !string.IsNullOrWhiteSpace(x)))
 					{
 						var newResult = new ResultWindow();
 						var vm = new ResultVM(SelectedDB, query);
@@ -302,7 +293,8 @@ namespace Sql_Widget.ViewModels
 				{
 					SelectedFields = new List<TableColumn>();
 					Conditions = new List<ConditionElement> { new ConditionElement() };
-					QueryValue = string.Empty;
+					QueryContent = string.Empty;
+					ExecutableQuery = string.Empty;
 				});
 			}
 		}
