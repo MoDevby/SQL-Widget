@@ -11,6 +11,7 @@
 ## Result Page:
 	* F5: Re-Execute.
 
-# This Project is using the following libraries:
+# This project is using the following open source libraries:
 [MaterialDesignInXamlToolkit](https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit) under the MIT license.
 [PropertyChanged](https://github.com/Fody/PropertyChanged) under the MIT license.
+[Json.NET](https://www.newtonsoft.com/json) under the MIT license.

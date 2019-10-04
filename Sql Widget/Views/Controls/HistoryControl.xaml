@@ -11,7 +11,7 @@
 		<Style x:Key="MyGridStyle" TargetType="{x:Type Grid}">
 			<Style.Resources>
 				<Style TargetType="{x:Type TextBlock}">
-					<Setter Property="Foreground" Value="{Binding Succeeded,Converter={StaticResource ResultToColorConverter}}" />
+					<Setter Property="Foreground" Value="{Binding Succeeded, Mode=OneWay, Converter={StaticResource ResultToColorConverter}}" />
 				</Style>
 			</Style.Resources>
 		</Style>
@@ -22,7 +22,7 @@
 					<RowDefinition/>
 				</Grid.RowDefinitions>
 								
-				<StackPanel Grid.Row="0" HorizontalAlignment="Stretch" Orientation="Horizontal" Margin="5,0">
+				<StackPanel Grid.Row="0" Orientation="Horizontal" Margin="5,0">
 					<TextBlock Text="DB: " HorizontalAlignment="Right" />
 					<TextBlock Text="{Binding DBName}" />
 					<Separator  Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
@@ -34,7 +34,7 @@
 					<TextBlock Text="{Binding Date}"/>
 				</StackPanel>
 
-				<DockPanel Grid.Row="1" HorizontalAlignment="Stretch" >
+				<DockPanel Grid.Row="1" >
 					<CheckBox HorizontalAlignment="Left" IsChecked="{Binding Selected,Mode=OneWayToSource}"
 							ToolTip="Select to execute" VerticalAlignment="Center"/>
 					<TextBox HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="5,0"
@@ -44,5 +44,5 @@
 		</DataTemplate>
 	</UserControl.Resources>
 
-	<ListBox Margin="5" ItemTemplate="{StaticResource HistoryElement}" ItemsSource="{Binding HistoryItems}"/>
+	<ListBox Margin="5" ItemTemplate="{StaticResource HistoryElement}" ItemsSource="{Binding HistoryItems}" HorizontalContentAlignment="Stretch"/>
 </UserControl>

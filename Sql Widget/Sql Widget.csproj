@@ -49,6 +49,10 @@
       <HintPath>..\packages\MaterialDesignThemes.2.4.0.1044\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="PropertyChanged, Version=2.5.4.0, Culture=neutral, PublicKeyToken=ee3ee20bcf148ddd, processorArchitecture=MSIL">
       <HintPath>..\packages\PropertyChanged.Fody.2.5.4\lib\net452\PropertyChanged.dll</HintPath>
       <Private>True</Private>
@@ -75,6 +79,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Entities\FavoriteItem.cs" />
+    <Compile Include="Models\FavoriteModel.cs" />
     <Compile Include="Views\Controls\FavoriteControl.xaml.cs">
       <DependentUpon>FavoriteControl.xaml</DependentUpon>
     </Compile>
@@ -98,6 +104,9 @@
     <Compile Include="Models\QueryModel.cs" />
     <Compile Include="Models\TableColumnsModel.cs" />
     <Compile Include="Models\TablesModel.cs" />
+    <Compile Include="Views\FavoriteWindow.xaml.cs">
+      <DependentUpon>FavoriteWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ResultWindow.xaml.cs">
       <DependentUpon>ResultWindow.xaml</DependentUpon>
     </Compile>
@@ -120,6 +129,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Controls\WhereControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FavoriteWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

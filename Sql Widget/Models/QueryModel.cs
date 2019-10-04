@@ -16,7 +16,11 @@ namespace Sql_Widget.Models
 				DataTable dt = new DataTable();
 				try
 				{
-					switch (query.Split(' ')[0].ToLower())
+					query = query.Trim();
+					var firstWord = query.IndexOf(" ") > -1
+						? query.Substring(0, query.TrimStart().IndexOf(" "))
+						: query;
+					switch (firstWord.ToLower())
 					{
 						case "select":
 							var sda = new SqlDataAdapter(query, con);
