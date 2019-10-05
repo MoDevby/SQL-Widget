@@ -53,8 +53,8 @@ namespace Sql_Widget.ViewModels
 		#region Query
 		public string QueryContent { get; set; }
 		public string ExecutableQuery { get; set; }
-		public bool QueryEnabled => !string.IsNullOrWhiteSpace(SelectedDB);
-		private bool IsValidExecutableQuery => !string.IsNullOrWhiteSpace(SelectedDB) && !string.IsNullOrWhiteSpace(ExecutableQuery);
+		public bool IsDBSelected => !string.IsNullOrWhiteSpace(SelectedDB);
+		private bool IsValidExecutableQuery => IsDBSelected && !string.IsNullOrWhiteSpace(ExecutableQuery);
 		#endregion
 		#region Select
 		public List<TableColumn> VisibleFields => Fields.Where(x => !SelectedFields.Contains(x)).ToList();
@@ -66,6 +66,9 @@ namespace Sql_Widget.ViewModels
 		public List<ConditionElement> Conditions { get; set; } = new List<ConditionElement> { new ConditionElement() };
 		public Dictionary<CompareOperators, string> CompareOperators { get; set; }
 		public List<RelationOperators> RelationOperators { get; set; }
+		#endregion
+		#region Favorite
+		public List<FavoriteItem> FavoriteItems { get; set; } = FavoriteModel.GetFavoriteList();
 		#endregion
 		#region History
 		public List<HistoryItem> HistoryItems { get; set; } = new List<HistoryItem>();
@@ -247,6 +250,33 @@ namespace Sql_Widget.ViewModels
 			}
 		}
 		#endregion
+		#region Favorite
+		public ICommand AddFavoriteCommand
+		{
+			get
+			{
+				return new ButtonsCommand((object obj) =>
+				{
+					FavoriteModel.AddNewFavoriteItem(new FavoriteItem() { Description = "Hi motherfuckers", Query = "Select * from @VAR_1  @VAR_2" });
+					//todo: show favorite window without index
+					FavoriteItems = FavoriteModel.GetFavoriteList();
+				});
+			}
+		}
+
+		public ICommand EditFavoriteCommand
+		{
+			get
+			{
+				return new ButtonsCommand((object obj) =>
+				{
+					var item = (FavoriteItem)obj;
+					//todo: show favorite window and pass the index
+					FavoriteItems = FavoriteModel.GetFavoriteList();
+				});
+			}
+		}
+		#endregion
 		#region Bottom Buttons
 		public ICommand ExecuteCommand
 		{
@@ -264,6 +294,9 @@ namespace Sql_Widget.ViewModels
 							break;
 						case "History":
 							ExecutableQuery = string.Join(";", HistoryItems.Where(x => x.Selected).Select(x => x.Query));
+							break;
+						case "Favorite":
+							ExecutableQuery = string.Join(";", FavoriteItems.Where(x => x.Selected).Select(x => x.QueryWithVariables));
 							break;
 						default:
 							break;
@@ -300,6 +333,10 @@ namespace Sql_Widget.ViewModels
 							HistoryItems.ForEach(x => x.Selected = false);
 							HistoryItems = new List<HistoryItem>(HistoryItems);
 							break;
+						case "Favorite":
+							FavoriteItems.ForEach(x => x.Selected = false);
+							FavoriteItems = FavoriteModel.GetFavoriteList();
+							break;
 						default:
 							break;
 					}
@@ -308,7 +345,5 @@ namespace Sql_Widget.ViewModels
 		}
 		#endregion
 		#endregion
-
-
 	}
 }

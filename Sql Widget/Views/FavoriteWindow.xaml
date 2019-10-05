@@ -1,0 +1,13 @@
+﻿<Window x:Class="Sql_Widget.Views.FavoriteWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:local="clr-namespace:Sql_Widget.Views"
+		
+		TextElement.Foreground="{DynamicResource MaterialDesignBody}" Background="{DynamicResource MaterialDesignPaper}"
+		FontFamily="{DynamicResource MaterialDesignFont}" WindowStartupLocation="CenterScreen"
+		Title="Manage Favorite Item" ShowInTaskbar="False" SizeToContent="WidthAndHeight">
+	<Grid>
+
+	</Grid>
+</Window>
