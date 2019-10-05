@@ -79,8 +79,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Entities\FavoriteItem.cs" />
-    <Compile Include="Models\FavoriteModel.cs" />
     <Compile Include="Views\Controls\FavoriteControl.xaml.cs">
       <DependentUpon>FavoriteControl.xaml</DependentUpon>
     </Compile>
@@ -104,9 +102,6 @@
     <Compile Include="Models\QueryModel.cs" />
     <Compile Include="Models\TableColumnsModel.cs" />
     <Compile Include="Models\TablesModel.cs" />
-    <Compile Include="Views\FavoriteWindow.xaml.cs">
-      <DependentUpon>FavoriteWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\ResultWindow.xaml.cs">
       <DependentUpon>ResultWindow.xaml</DependentUpon>
     </Compile>
@@ -129,10 +124,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Controls\WhereControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\FavoriteWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
