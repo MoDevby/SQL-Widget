@@ -21,16 +21,16 @@ namespace Sql_Widget
 			this.Top = (SystemParameters.PrimaryScreenHeight / 2) - (e.NewSize.Height / 2);
 		}
 
-		private void Expander_Expanded(object sender, RoutedEventArgs e)
-		{
-			this.SizeToContent = SizeToContent.WidthAndHeight;
-		}
+		//private void Expander_Expanded(object sender, RoutedEventArgs e)
+		//{
+		//	this.SizeToContent = SizeToContent.WidthAndHeight;
+		//}
 
-		private void Expander_Collapsed(object sender, RoutedEventArgs e)
-		{
-			this.SizeToContent = SizeToContent.Width;
-			this.Height = 135;
-		}
+		//private void Expander_Collapsed(object sender, RoutedEventArgs e)
+		//{
+		//	this.SizeToContent = SizeToContent.Width;
+		//	this.Height = 135;
+		//}
 
 		//private void Window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
 		//{
