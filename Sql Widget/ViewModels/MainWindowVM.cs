@@ -32,6 +32,7 @@ namespace Sql_Widget.ViewModels
 		private bool _useWinAuth;
 		public bool ValidConnection { get; set; }
 		public string ServerName { get; set; }
+		public string ServerMessage { get; set; }
 		public bool UseWinAuth
 		{
 			get { return _useWinAuth; }
@@ -41,11 +42,9 @@ namespace Sql_Widget.ViewModels
 				if (!value) return;
 
 				UserName = "";
-				Password = "";
 			}
 		}
 		public string UserName { get; set; }
-		public string Password { get; set; }
 		#endregion
 		#region DB
 		public List<string> DBsList { get; set; } = new List<string>();
@@ -111,15 +110,20 @@ namespace Sql_Widget.ViewModels
 		private async void VerfiyServer()
 		{
 			ServerName = Properties.Settings.Default.Server;
+			ServerMessage = "Connecting....";
 
 			if (await _dbModel.CheckConnection())
 			{
 				ValidConnection = true;
+				ServerMessage = "Connected!";
 				AsyncLoadDBs();
 				IntiateFields();
 			}
 			else
+			{
+				ServerMessage = "Error, no connection was established to the server!";
 				ValidConnection = false;
+			}
 		}
 
 		private async void AsyncLoadDBs() => DBsList = await _dbModel.GetAllDBs();
@@ -206,7 +210,7 @@ namespace Sql_Widget.ViewModels
 					ValidConnection = false;
 					Properties.Settings.Default.Server = ServerName;
 					Properties.Settings.Default.UserName = UserName;
-					Properties.Settings.Default.Password = Password;
+					Properties.Settings.Default.Password = (obj as PasswordBox).Password;
 					Properties.Settings.Default.Save();
 					ResetCacheCommand.Execute("");
 				});

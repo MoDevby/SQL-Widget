@@ -5,9 +5,9 @@
 		xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
 		xmlns:myControls="clr-namespace:Sql_Widget.Views.Controls"
 		
-		SizeToContent="WidthAndHeight" ResizeMode="NoResize" FontSize="15" ShowInTaskbar="{Binding VisibleInTaskbar}"
+		SizeToContent="WidthAndHeight" ResizeMode="NoResize" FontSize="15" 
 		WindowStyle="None" AllowsTransparency="True" Background="Transparent"
-		SizeChanged="Window_SizeChanged"
+		SizeChanged="Window_SizeChanged" ShowInTaskbar="{Binding VisibleInTaskbar}"
 		TextElement.Foreground="{DynamicResource MaterialDesignBody}" 
 		FontFamily="{DynamicResource MaterialDesignFont}" Topmost="{Binding TopMost}">
 	<Window.Resources>
