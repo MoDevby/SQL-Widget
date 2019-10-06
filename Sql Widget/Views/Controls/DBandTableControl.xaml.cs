@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 
-namespace Sql_Widget.Controls
+namespace Sql_Widget.Views.Controls
 {
 	public partial class DBandTableControl : UserControl
 	{

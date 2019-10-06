@@ -20,7 +20,7 @@ namespace Sql_Widget.Models
 			if (!_cachedTables.ContainsKey(dbName))
 			{
 				List<string> tables = new List<string>();
-				using (SqlConnection con = new SqlConnection(QueryModel.ConnectionString(dbName)))
+				using (SqlConnection con = new SqlConnection(QueryModel.GetConnectionString(dbName)))
 				{
 					con.Open();
 					DataTable schema = con.GetSchema("Tables");

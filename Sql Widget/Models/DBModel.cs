@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Data;
+﻿using Sql_Widget.Helper;
+using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,22 +20,37 @@ namespace Sql_Widget.Models
 			TableColumnsModel.InvalidateCache();
 		}
 
-		public Task<List<string>> GetAllDBs() => Task.Run(() => GetDbs());
-
-		private List<string> GetDbs()
+		public async Task<List<string>> GetAllDBs()
 		{
 			if (!_cachedDBs.Any())
-				using (SqlConnection con = new SqlConnection(QueryModel.ConnectionString(_dbName)))
+				using (SqlConnection con = new SqlConnection(QueryModel.GetConnectionString(_dbName)))
 				{
-					con.Open();
+					await con.OpenAsync();
 					using (SqlCommand cmd = new SqlCommand(_selectAllDBsString, con))
 					{
-						using (IDataReader dr = cmd.ExecuteReader())
-							while (dr.Read())
-								_cachedDBs.Add(dr[0].ToString());
+						using (var dr = await cmd.ExecuteReaderAsync())
+							while (await dr.ReadAsync())
+								_cachedDBs.Add(await dr.GetTextReader(0).ReadToEndAsync());
 					}
 				}
 			return _cachedDBs;
+		}
+
+		public async Task<bool> CheckConnection()
+		{
+			using (SqlConnection con = new SqlConnection(QueryModel.GetConnectionString(_dbName)))
+			{
+				try
+				{
+					await con.OpenAsync().TimeoutAfter(10000);
+					con.Close();
+					return true;
+				}
+				catch(Exception ex)
+				{
+					return false;
+				}
+			}
 		}
 	}
 }

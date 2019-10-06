@@ -1,60 +1,74 @@
 ﻿<Window x:Class="Sql_Widget.MainWindow"
 		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:converters="clr-namespace:Sql_Widget.Helper"
 		xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-		xmlns:myControls="clr-namespace:Sql_Widget.Controls"
+		xmlns:myControls="clr-namespace:Sql_Widget.Views.Controls"
 		
-		SizeToContent="WidthAndHeight" ResizeMode="NoResize" FontSize="15" ShowInTaskbar="{Binding VisibleInTaskbar}"
+		SizeToContent="WidthAndHeight" ResizeMode="NoResize" FontSize="15" 
 		WindowStyle="None" AllowsTransparency="True" Background="Transparent"
-		SizeChanged="Window_SizeChanged"
+		SizeChanged="Window_SizeChanged" ShowInTaskbar="{Binding VisibleInTaskbar}"
 		TextElement.Foreground="{DynamicResource MaterialDesignBody}" 
 		FontFamily="{DynamicResource MaterialDesignFont}" Topmost="{Binding TopMost}">
+	<Window.Resources>
+		<converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+	</Window.Resources>
 	<Window.InputBindings>
 		<KeyBinding Key="F1" Command="{Binding HelpCommand}" />
 		<KeyBinding Key="F5" Command="{Binding ExecuteCommand}" />
 		<KeyBinding Key="Tab" Modifiers="Ctrl" Command="{Binding ChangeTab}" CommandParameter="{Binding ElementName=Tabs}" />
 	</Window.InputBindings>
 	<Border Background="{DynamicResource MaterialDesignPaper}" CornerRadius="20,0,0,20" Padding="6">
-		<Expander ExpandDirection="Left" Expanded="Expander_Expanded" Collapsed="Expander_Collapsed" IsExpanded="True">
+		<Expander Name ="mainExpander" ExpandDirection="Left">
 			<Expander.Header>
 				<ToggleButton Style="{StaticResource MaterialDesignActionToggleButton}" ToolTip="Always on Top" IsChecked="{Binding TopMost}">
 					<materialDesign:PackIcon Kind="Database" Width="24" Height="24"/>
 				</ToggleButton>
 			</Expander.Header>
 			<StackPanel>
-				<myControls:DBandTableControl x:Name="DBSelector"/>
-				<TabControl Name="Tabs" SelectedItem="{Binding SelectedTab,Mode=OneWayToSource}" Background="{DynamicResource MaterialDesignPaper}">
-					<TabItem Header="Query" IsTabStop="False">
-						<TextBox Height="290" MaxWidth="470" Margin="5" FontSize="20" Text="{Binding QueryContent,UpdateSourceTrigger=PropertyChanged}"
+				<Expander IsExpanded="{Binding ValidConnection,Mode=OneWay,Converter={StaticResource InverseBooleanConverter}}">
+					<Expander.Header>
+						<StackPanel Orientation="Horizontal">
+							<TextBlock Text="Server: "/>
+							<TextBlock Text="{Binding ServerName}"/>
+						</StackPanel>
+					</Expander.Header>
+					<myControls:ServerControl/>
+				</Expander>
+				<StackPanel>
+					<myControls:DBandTableControl x:Name="DBSelector"/>
+					<TabControl Name="Tabs" SelectedItem="{Binding SelectedTab,Mode=OneWayToSource}" Background="{DynamicResource MaterialDesignPaper}">
+						<TabItem Header="Query" IsTabStop="False">
+							<TextBox Height="290" MaxWidth="470" Margin="5" FontSize="20" Text="{Binding QueryContent,UpdateSourceTrigger=PropertyChanged}"
 							 IsEnabled="{Binding QueryEnabled,Mode=OneWay}" HorizontalAlignment="Stretch" TextWrapping="Wrap" AcceptsReturn="True"
 							 Foreground="{DynamicResource MaterialDesignBody}"/>
-					</TabItem>
-					<TabItem Header="SELECT" IsTabStop="False">
-						<StackPanel Orientation="Horizontal" Height="300">
-							<myControls:SelectControl />
-							<myControls:WhereControl />
-						</StackPanel>
-					</TabItem>
-					<!--<TabItem Header="UPDATE" IsTabStop="False" Visibility="Collapsed" />
+						</TabItem>
+						<TabItem Header="SELECT" IsTabStop="False">
+							<StackPanel Orientation="Horizontal" Height="300">
+								<myControls:SelectControl />
+								<myControls:WhereControl />
+							</StackPanel>
+						</TabItem>
+						<!--<TabItem Header="UPDATE" IsTabStop="False" Visibility="Collapsed" />
 						<TabItem Header="INSERT" IsTabStop="False" Visibility="Collapsed"/>
 						<TabItem Header="DELETE" IsTabStop="False" Visibility="Collapsed"/>-->
-					<TabItem Header="History" IsTabStop="False">
-						<myControls:HistoryControl Height="300"/>
-					</TabItem>
-					<!--<TabItem Header="Favorite" IsTabStop="False" >
+						<TabItem Header="History" IsTabStop="False">
+							<myControls:HistoryControl Height="300"/>
+						</TabItem>
+						<!--<TabItem Header="Favorite" IsTabStop="False" >
 						<myControls:FavoriteControl Height="300"/>
 					</TabItem>-->
-				</TabControl>
-				<Grid Margin="5">
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition/>
-						<ColumnDefinition/>
-					</Grid.ColumnDefinitions>
+					</TabControl>
+					<Grid Margin="5">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition/>
+							<ColumnDefinition/>
+						</Grid.ColumnDefinitions>
 
-					<Button Content="Execute" Grid.Column="0" Command="{Binding ExecuteCommand}" Margin="10,0" Padding="5" ToolTip="(F5)"/>
-					<Button Content="Clear" Grid.Column="1" Command="{Binding ClearCommand}" Margin="10,0" Padding="5" ToolTip="Clear current tab content"/>
-				</Grid>
+						<Button Content="Execute" Grid.Column="0" Command="{Binding ExecuteCommand}" Margin="10,0" Padding="5" ToolTip="(F5)"/>
+						<Button Content="Clear" Grid.Column="1" Command="{Binding ClearCommand}" Margin="10,0" Padding="5" ToolTip="Clear current tab content"/>
+					</Grid>
+				</StackPanel>
 			</StackPanel>
 		</Expander>
 	</Border>
