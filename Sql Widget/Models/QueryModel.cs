@@ -6,11 +6,20 @@ namespace Sql_Widget.Models
 {
 	class QueryModel
 	{
-		public static string ConnectionString(string dbName) => $"server=.;Database={dbName};Integrated Security=true";
+		public static string GetConnectionString(string dbName)
+		{
+			var server = Properties.Settings.Default.Server;
+			var credentials = string.IsNullOrWhiteSpace(Properties.Settings.Default.UserName)
+				? "Integrated Security=true"
+				: $"User Id={Properties.Settings.Default.UserName}; Password={Properties.Settings.Default.Password}";
+
+			return $"server={server};Database={dbName};{credentials}";
+		}
+
 
 		public DataTable Execute(string dbName, string query)
 		{
-			using (SqlConnection con = new SqlConnection(ConnectionString(dbName)))
+			using (SqlConnection con = new SqlConnection(GetConnectionString(dbName)))
 			{
 				//Thread.Sleep(1000);
 				DataTable dt = new DataTable();

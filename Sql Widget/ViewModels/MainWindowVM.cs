@@ -13,7 +13,7 @@ using System.Windows.Input;
 
 namespace Sql_Widget.ViewModels
 {
-	class MainWindowVM : Window, INotifyPropertyChanged
+	class MainWindowVM : INotifyPropertyChanged
 	{
 #pragma warning disable 0067
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -27,6 +27,24 @@ namespace Sql_Widget.ViewModels
 		public TabItem SelectedTab { get; set; }
 		public bool TopMost { get; set; }
 		public bool VisibleInTaskbar { get { return !TopMost; } }
+		#endregion
+		#region Server
+		private bool _useWinAuth;
+		public bool ValidConnection { get; set; }
+		public string ServerName { get; set; }
+		public string ServerMessage { get; set; }
+		public bool UseWinAuth
+		{
+			get { return _useWinAuth; }
+			set
+			{
+				_useWinAuth = value;
+				if (!value) return;
+
+				UserName = "";
+			}
+		}
+		public string UserName { get; set; }
 		#endregion
 		#region DB
 		public List<string> DBsList { get; set; } = new List<string>();
@@ -81,8 +99,7 @@ namespace Sql_Widget.ViewModels
 			CompareOperators = OperatorsModel.GetCompareOperators();
 			RelationOperators = OperatorsModel.GetReleationsOperators();
 
-			AsyncLoadDBs();
-			IntiateFields();
+			VerfiyServer();
 		}
 
 		private async void IntiateFields()
@@ -91,6 +108,25 @@ namespace Sql_Widget.ViewModels
 			Conditions = new List<ConditionElement> { new ConditionElement() };
 			Fields = new List<TableColumn> { new TableColumn { Name = "*", Position = 0, Type = "*" } }
 				.Concat(await TableColumnsModel.GetTableColumns(SelectedDB, SelectedTable)).ToList();
+		}
+
+		private async void VerfiyServer()
+		{
+			ServerName = Properties.Settings.Default.Server;
+			ServerMessage = "Connecting....";
+
+			if (await _dbModel.CheckConnection())
+			{
+				ValidConnection = true;
+				ServerMessage = "Connected!";
+				AsyncLoadDBs();
+				IntiateFields();
+			}
+			else
+			{
+				ServerMessage = "Error, no connection was established to the server!";
+				ValidConnection = false;
+			}
 		}
 
 		private async void AsyncLoadDBs() => DBsList = await _dbModel.GetAllDBs();
@@ -167,6 +203,23 @@ namespace Sql_Widget.ViewModels
 			}
 		}
 		#endregion
+		#region Server
+		public ICommand SaveServerCommand
+		{
+			get
+			{
+				return new ButtonsCommand((object obj) =>
+				{
+					ValidConnection = false;
+					Properties.Settings.Default.Server = ServerName;
+					Properties.Settings.Default.UserName = UserName;
+					Properties.Settings.Default.Password = (obj as PasswordBox).Password;
+					Properties.Settings.Default.Save();
+					ResetCacheCommand.Execute("");
+				});
+			}
+		}
+		#endregion
 		#region DB Bar
 		public ICommand ResetCacheCommand
 		{
@@ -174,9 +227,9 @@ namespace Sql_Widget.ViewModels
 			{
 				return new ButtonsCommand((object obj) =>
 				{
-					_dbModel.InvalidateCache();
-					AsyncLoadDBs();
 					SelectedDB = null;
+					_dbModel.InvalidateCache();
+					VerfiyServer();
 				});
 			}
 		}

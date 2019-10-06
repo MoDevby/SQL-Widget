@@ -80,6 +80,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Entities\FavoriteItem.cs" />
+    <Compile Include="Helper\Extensions.cs" />
     <Compile Include="Models\FavoriteModel.cs" />
     <Compile Include="Views\Controls\FavoriteControl.xaml.cs">
       <DependentUpon>FavoriteControl.xaml</DependentUpon>
@@ -89,6 +90,9 @@
     </Compile>
     <Compile Include="Views\Controls\SelectControl.xaml.cs">
       <DependentUpon>SelectControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controls\ServerControl.xaml.cs">
+      <DependentUpon>ServerControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\WhereControl.xaml.cs">
       <DependentUpon>WhereControl.xaml</DependentUpon>
@@ -128,13 +132,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Controls\ServerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Controls\WhereControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\FavoriteWindow.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -187,7 +195,9 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\sql.ico" />

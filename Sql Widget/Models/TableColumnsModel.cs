@@ -22,7 +22,7 @@ namespace Sql_Widget.Models
 			if (!_cachedColumns.ContainsKey(key))
 			{
 				List<TableColumn> columns = new List<TableColumn>();
-				using (SqlConnection con = new SqlConnection(QueryModel.ConnectionString(db)))
+				using (SqlConnection con = new SqlConnection(QueryModel.GetConnectionString(db)))
 				{
 					con.Open();
 					using (SqlCommand cmd = new SqlCommand(GetAllTableColumnsQuery(table), con))
