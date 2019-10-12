@@ -71,7 +71,7 @@ namespace Sql_Widget.ViewModels
 		#region Query
 		public string QueryContent { get; set; }
 		public string ExecutableQuery { get; set; }
-		public bool QueryEnabled => !string.IsNullOrWhiteSpace(SelectedDB);
+		public bool QueryEnabled => ValidConnection && !string.IsNullOrWhiteSpace(SelectedDB);
 		private bool IsValidExecutableQuery => !string.IsNullOrWhiteSpace(SelectedDB) && !string.IsNullOrWhiteSpace(ExecutableQuery);
 		#endregion
 		#region Select
@@ -110,6 +110,7 @@ namespace Sql_Widget.ViewModels
 		private async void VerfiyServer()
 		{
 			ServerName = Properties.Settings.Default.Server;
+			UserName = Properties.Settings.Default.UserName;
 			ServerMessage = "Connecting....";
 
 			if (await _dbModel.CheckConnection())
@@ -126,11 +127,35 @@ namespace Sql_Widget.ViewModels
 			}
 		}
 
-		private async void AsyncLoadDBs() => DBsList = await _dbModel.GetAllDBs();
+		private async void AsyncLoadDBs()
+		{
+			try
+			{
+				DBsList = await _dbModel.GetAllDBs();
+			}
+			catch (Exception)
+			{
+				DBsList = new List<string>();
+				ServerMessage = $"Error, Couldn't Load The DBs from {ServerName}!";
+				ValidConnection = false;
+			}
+		}
 
-		private async void AsyncUpdateTables() => TablesList = string.IsNullOrWhiteSpace(_selectedDB)
-			? new List<string>()
-			: await TablesModel.GetAllTables(SelectedDB);
+		private async void AsyncUpdateTables()
+		{
+			if (!string.IsNullOrWhiteSpace(_selectedDB))
+				try
+				{
+					TablesList = await TablesModel.GetAllTables(SelectedDB);
+					return;
+				}
+				catch (Exception)
+				{
+					ServerMessage = $"Error, Couldn't Load The Tables for {SelectedDB}!";
+					ValidConnection = false;
+				}
+			TablesList = new List<string>();
+		}
 
 		private string GetSelectQuery()
 		{
@@ -254,6 +279,17 @@ namespace Sql_Widget.ViewModels
 				});
 			}
 		}
+		public ICommand SelectDBCommand
+		{
+			get
+			{
+				return new ButtonsCommand((object obj) =>
+				{
+					var db = (string)obj;
+					SelectedDB = db;
+				});
+			}
+		}
 		#endregion
 		#region Select
 		public ICommand AddFieldCommand
@@ -361,7 +397,5 @@ namespace Sql_Widget.ViewModels
 		}
 		#endregion
 		#endregion
-
-
 	}
 }

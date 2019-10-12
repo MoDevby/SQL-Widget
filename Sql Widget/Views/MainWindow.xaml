@@ -40,7 +40,7 @@
 					<TabControl Name="Tabs" SelectedItem="{Binding SelectedTab,Mode=OneWayToSource}" Background="{DynamicResource MaterialDesignPaper}">
 						<TabItem Header="Query" IsTabStop="False">
 							<TextBox Height="290" MaxWidth="470" Margin="5" FontSize="20" Text="{Binding QueryContent,UpdateSourceTrigger=PropertyChanged}"
-							 IsEnabled="{Binding QueryEnabled,Mode=OneWay}" HorizontalAlignment="Stretch" TextWrapping="Wrap" AcceptsReturn="True"
+							 HorizontalAlignment="Stretch" TextWrapping="Wrap" AcceptsReturn="True"
 							 Foreground="{DynamicResource MaterialDesignBody}"/>
 						</TabItem>
 						<TabItem Header="SELECT" IsTabStop="False">
@@ -65,7 +65,8 @@
 							<ColumnDefinition/>
 						</Grid.ColumnDefinitions>
 
-						<Button Content="Execute" Grid.Column="0" Command="{Binding ExecuteCommand}" Margin="10,0" Padding="5" ToolTip="(F5)"/>
+						<Button Content="Execute" Grid.Column="0" Command="{Binding ExecuteCommand}" Margin="10,0" Padding="5" ToolTip="(F5)"
+								 IsEnabled="{Binding QueryEnabled,Mode=OneWay}"/>
 						<Button Content="Clear" Grid.Column="1" Command="{Binding ClearCommand}" Margin="10,0" Padding="5" ToolTip="Clear current tab content"/>
 					</Grid>
 				</StackPanel>
