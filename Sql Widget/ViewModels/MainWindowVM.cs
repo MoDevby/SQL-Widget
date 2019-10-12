@@ -18,8 +18,6 @@ namespace Sql_Widget.ViewModels
 #pragma warning disable 0067
 		public event PropertyChangedEventHandler PropertyChanged;
 #pragma warning restore 0067
-		private string _selectedDB;
-		private string _selectedTable;
 		private DBModel _dbModel = new DBModel();
 
 		#region Properties
@@ -47,43 +45,16 @@ namespace Sql_Widget.ViewModels
 		public string UserName { get; set; }
 		#endregion
 		#region DB
+		public string SelectedDB { get; set; }
 		public List<string> DBsList { get; set; } = new List<string>();
-		public List<string> TablesList { get; set; } = new List<string>();
-		public string SelectedDB
-		{
-			get { return _selectedDB; }
-			set
-			{
-				_selectedDB = value;
-				AsyncUpdateTables();
-				SelectedTable = null;
-			}
-		}
-		public string SelectedTable
-		{
-			get { return _selectedTable; }
-			set { _selectedTable = value; IntiateFields(); }
-		}
-		public bool SelectTablesIsEnabled => TablesList.Any();
-		public List<TableColumn> Fields { get; set; } = new List<TableColumn>();
-		public bool ComponentsEnabled => Fields.Count() > 1;
 		#endregion
 		#region Query
 		public string QueryContent { get; set; }
 		public string ExecutableQuery { get; set; }
-		public bool QueryEnabled => ValidConnection && !string.IsNullOrWhiteSpace(SelectedDB);
-		private bool IsValidExecutableQuery => !string.IsNullOrWhiteSpace(SelectedDB) && !string.IsNullOrWhiteSpace(ExecutableQuery);
-		#endregion
-		#region Select
-		public List<TableColumn> VisibleFields => Fields.Where(x => !SelectedFields.Contains(x)).ToList();
-		public List<TableColumn> SelectedFields { get; set; } = new List<TableColumn>();
-		private bool IsValidSelect => SelectedFields.Any();
-		#endregion
-		#region Where
-		public List<TableColumn> WhereFields { get { return Fields.Where(a => a.Name != "*").ToList(); } }
-		public List<ConditionElement> Conditions { get; set; } = new List<ConditionElement> { new ConditionElement() };
-		public Dictionary<CompareOperators, string> CompareOperators { get; set; }
-		public List<RelationOperators> RelationOperators { get; set; }
+		public bool CanExecute => ValidConnection && !string.IsNullOrWhiteSpace(SelectedDB) &&
+				(!string.IsNullOrWhiteSpace(QueryContent) || SelectedTab.Header.ToString() != "Query");
+		public bool IsValidExecutableQuery => ValidConnection &&
+			!string.IsNullOrWhiteSpace(SelectedDB) && !string.IsNullOrWhiteSpace(ExecutableQuery);
 		#endregion
 		#region History
 		public List<HistoryItem> HistoryItems { get; set; } = new List<HistoryItem>();
@@ -93,24 +64,14 @@ namespace Sql_Widget.ViewModels
 		#region Methods
 		public MainWindowVM()
 		{
-			CompareOperators = OperatorsModel.GetCompareOperators();
-			RelationOperators = OperatorsModel.GetReleationsOperators();
-
 			VerfiyServer();
-		}
-
-		private async void IntiateFields()
-		{
-			SelectedFields = new List<TableColumn>();
-			Conditions = new List<ConditionElement> { new ConditionElement() };
-			Fields = new List<TableColumn> { new TableColumn { Name = "*", Position = 0, Type = "*" } }
-				.Concat(await TableColumnsModel.GetTableColumns(SelectedDB, SelectedTable)).ToList();
 		}
 
 		private async void VerfiyServer()
 		{
 			ServerName = Properties.Settings.Default.Server;
 			UserName = Properties.Settings.Default.UserName;
+
 			ServerMessage = "Connecting....";
 
 			if (await _dbModel.CheckConnection())
@@ -118,7 +79,6 @@ namespace Sql_Widget.ViewModels
 				ValidConnection = true;
 				ServerMessage = "Connected!";
 				AsyncLoadDBs();
-				IntiateFields();
 			}
 			else
 			{
@@ -129,6 +89,8 @@ namespace Sql_Widget.ViewModels
 
 		private async void AsyncLoadDBs()
 		{
+			SelectedDB = null;
+			_dbModel.InvalidateCache();
 			try
 			{
 				DBsList = await _dbModel.GetAllDBs();
@@ -139,59 +101,6 @@ namespace Sql_Widget.ViewModels
 				ServerMessage = $"Error, Couldn't Load The DBs from {ServerName}!";
 				ValidConnection = false;
 			}
-		}
-
-		private async void AsyncUpdateTables()
-		{
-			if (!string.IsNullOrWhiteSpace(_selectedDB))
-				try
-				{
-					TablesList = await TablesModel.GetAllTables(SelectedDB);
-					return;
-				}
-				catch (Exception)
-				{
-					ServerMessage = $"Error, Couldn't Load The Tables for {SelectedDB}!";
-					ValidConnection = false;
-				}
-			TablesList = new List<string>();
-		}
-
-		private string GetSelectQuery()
-		{
-			var Query = string.Empty;
-			if (IsValidSelect)
-			{
-				var fields = string.Join(", ", SelectedFields.Select(x => x.Name));
-				Query = $"SELECT {fields}{Environment.NewLine}FROM {SelectedTable}";
-
-				var whereConditions = Conditions.Where(x => x.SelectedField != "" && x.SelectedOerator != 0);
-				Query += ConstructWhereClause(whereConditions);
-			}
-			return Query;
-		}
-
-		private string ConstructWhereClause(IEnumerable<ConditionElement> whereConditions)
-		{
-			if (!whereConditions.Any()) return null;
-			var where = Environment.NewLine + "Where ";
-			var index = 0;
-			whereConditions.ToList().ForEach(condition =>
-			{
-				where += condition.SelectedField + CompareOperators.First(x => x.Key == condition.SelectedOerator).Value;
-				where += IsStringType(condition.SelectedField) && condition.Value != "null"
-							? string.IsNullOrEmpty(condition.Value) ? "" : $"'{condition.Value}'"
-							: string.IsNullOrWhiteSpace(condition.Value) ? "null" : condition.Value;
-				if (index < whereConditions.Count() - 1)
-					where += condition.NextLineOperator == 0 ? $" {RelationOperators.First()} " : $" {condition.NextLineOperator} ";
-				index++;
-			});
-			return where;
-		}
-		private bool IsStringType(string fieldName)
-		{
-			var type = Fields.FirstOrDefault(x => x.Name == fieldName).Type;
-			return type.Contains("char") || type.Contains("uniqueidentifier") || type.Contains("date");
 		}
 
 		private async void AddToHistory(string db, string query, ResultVM resultVm)
@@ -237,24 +146,13 @@ namespace Sql_Widget.ViewModels
 					Properties.Settings.Default.UserName = UserName;
 					Properties.Settings.Default.Password = (obj as PasswordBox).Password;
 					Properties.Settings.Default.Save();
-					ResetCacheCommand.Execute("");
+					VerfiyServer();
 				});
 			}
 		}
 		#endregion
 		#region DB Bar
-		public ICommand ResetCacheCommand
-		{
-			get
-			{
-				return new ButtonsCommand((object obj) =>
-				{
-					SelectedDB = null;
-					_dbModel.InvalidateCache();
-					VerfiyServer();
-				});
-			}
-		}
+
 		public ICommand HelpCommand
 		{
 			get
@@ -285,53 +183,11 @@ namespace Sql_Widget.ViewModels
 			{
 				return new ButtonsCommand((object obj) =>
 				{
-					var db = (string)obj;
-					SelectedDB = db;
-				});
-			}
-		}
-		#endregion
-		#region Select
-		public ICommand AddFieldCommand
-		{
-			get
-			{
-				return new ButtonsCommand((object obj) =>
-				{
-					var list = (ListBox)obj;
-					foreach (TableColumn item in list.SelectedItems)
-					{
-						SelectedFields.Add(item);
-					}
-					SelectedFields = new List<TableColumn>(SelectedFields);
-				});
-			}
-		}
-		public ICommand RemoveFieldCommand
-		{
-			get
-			{
-				return new ButtonsCommand((object obj) =>
-				{
-					var list = (ListBox)obj;
-					foreach (TableColumn item in list.SelectedItems)
-					{
-						SelectedFields.Remove(item);
-					}
-					SelectedFields = new List<TableColumn>(SelectedFields);
-				});
-			}
-		}
-		#endregion
-		#region Where
-		public ICommand AddConditionCommand
-		{
-			get
-			{
-				return new ButtonsCommand((object obj) =>
-				{
-					Conditions.Add(new ConditionElement());
-					Conditions = new List<ConditionElement>(Conditions);
+					var comboBox = (ComboBox)obj;
+
+					if (!DBsList.Contains(comboBox.Text))
+						comboBox.Text = "";
+					SelectedDB = comboBox.Text;
 				});
 			}
 		}
@@ -347,9 +203,6 @@ namespace Sql_Widget.ViewModels
 					{
 						case "Query":
 							ExecutableQuery = QueryContent;
-							break;
-						case "SELECT":
-							ExecutableQuery = GetSelectQuery();
 							break;
 						case "History":
 							ExecutableQuery = string.Join(";", HistoryItems.Where(x => x.Selected).Select(x => x.Query));
@@ -380,10 +233,6 @@ namespace Sql_Widget.ViewModels
 					{
 						case "Query":
 							QueryContent = string.Empty;
-							break;
-						case "SELECT":
-							SelectedFields = new List<TableColumn>();
-							Conditions = new List<ConditionElement> { new ConditionElement() };
 							break;
 						case "History":
 							HistoryItems.ForEach(x => x.Selected = false);

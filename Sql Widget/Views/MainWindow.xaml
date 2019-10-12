@@ -43,15 +43,6 @@
 							 HorizontalAlignment="Stretch" TextWrapping="Wrap" AcceptsReturn="True"
 							 Foreground="{DynamicResource MaterialDesignBody}"/>
 						</TabItem>
-						<TabItem Header="SELECT" IsTabStop="False">
-							<StackPanel Orientation="Horizontal" Height="300">
-								<myControls:SelectControl />
-								<myControls:WhereControl />
-							</StackPanel>
-						</TabItem>
-						<!--<TabItem Header="UPDATE" IsTabStop="False" Visibility="Collapsed" />
-						<TabItem Header="INSERT" IsTabStop="False" Visibility="Collapsed"/>
-						<TabItem Header="DELETE" IsTabStop="False" Visibility="Collapsed"/>-->
 						<TabItem Header="History" IsTabStop="False">
 							<myControls:HistoryControl Height="300"/>
 						</TabItem>
@@ -66,7 +57,7 @@
 						</Grid.ColumnDefinitions>
 
 						<Button Content="Execute" Grid.Column="0" Command="{Binding ExecuteCommand}" Margin="10,0" Padding="5" ToolTip="(F5)"
-								 IsEnabled="{Binding QueryEnabled,Mode=OneWay}"/>
+								 IsEnabled="{Binding CanExecute,Mode=OneWay}"/>
 						<Button Content="Clear" Grid.Column="1" Command="{Binding ClearCommand}" Margin="10,0" Padding="5" ToolTip="Clear current tab content"/>
 					</Grid>
 				</StackPanel>
