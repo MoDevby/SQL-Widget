@@ -82,6 +82,7 @@
     <Compile Include="Entities\FavoriteItem.cs" />
     <Compile Include="Helper\Extensions.cs" />
     <Compile Include="Models\FavoriteModel.cs" />
+    <Compile Include="ViewModels\FavoriteWindowVM.cs" />
     <Compile Include="Views\Controls\FavoriteControl.xaml.cs">
       <DependentUpon>FavoriteControl.xaml</DependentUpon>
     </Compile>
@@ -107,7 +108,7 @@
     </Compile>
     <Compile Include="ViewModels\MainWindowVM.cs" />
     <Compile Include="ViewModels\ResultVM.cs" />
-    <Page Include="Views\Controls\DBandTableControl.xaml">
+    <Page Include="Views\Controls\DBSelectControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -135,8 +136,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\Controls\DBandTableControl.xaml.cs">
-      <DependentUpon>DBandTableControl.xaml</DependentUpon>
+    <Compile Include="Views\Controls\DBSelectControl.xaml.cs">
+      <DependentUpon>DBSelectControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

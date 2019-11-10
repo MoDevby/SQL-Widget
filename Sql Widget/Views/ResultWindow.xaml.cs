@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Sql_Widget
+namespace Sql_Widget.Views
 {
 	/// <summary>
 	/// Interaction logic for ResultWindow.xaml

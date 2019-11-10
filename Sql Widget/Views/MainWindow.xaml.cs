@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Sql_Widget
+namespace Sql_Widget.Views
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
