@@ -88,21 +88,12 @@
     <Compile Include="Views\Controls\HistoryControl.xaml.cs">
       <DependentUpon>HistoryControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Controls\SelectControl.xaml.cs">
-      <DependentUpon>SelectControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Controls\ServerControl.xaml.cs">
       <DependentUpon>ServerControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Controls\WhereControl.xaml.cs">
-      <DependentUpon>WhereControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Helper\ButtonsCommand.cs" />
-    <Compile Include="Entities\ConditionElement.cs" />
     <Compile Include="Helper\Converters.cs" />
-    <Compile Include="Helper\Enums.cs" />
     <Compile Include="Entities\HistoryItem.cs" />
-    <Compile Include="Models\OperatorsModel.cs" />
     <Compile Include="Entities\TableColumn.cs" />
     <Compile Include="Models\DBModel.cs" />
     <Compile Include="Models\QueryModel.cs" />
@@ -128,15 +119,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Controls\SelectControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\Controls\ServerControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Controls\WhereControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

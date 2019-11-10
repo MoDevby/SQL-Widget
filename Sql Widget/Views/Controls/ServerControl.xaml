@@ -23,24 +23,25 @@
 			<RowDefinition/>
 		</Grid.RowDefinitions>
 
-		<TextBlock Grid.Column="0" Grid.Row="0" Text="Server Name:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+		<TextBlock Grid.Column="0" Grid.Row="0" Text="Server Name:" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5"/>
 		<TextBox Grid.Column="1" Grid.Row="0" Text="{Binding ServerName}" VerticalAlignment="Center" HorizontalAlignment="Stretch"
-				 Margin="5" Grid.ColumnSpan="2"/>
-		<Button  Grid.Column="3" Grid.Row="0" Margin="5" Content="Save" Command="{Binding SaveServerCommand}"
+				 Margin="5" Grid.ColumnSpan="2" HorizontalContentAlignment="Center"/>
+		<Button  Grid.Column="3" Grid.Row="0" Margin="5" Content="Connect" Command="{Binding SaveServerCommand}"
 				 CommandParameter="{Binding ElementName=PasswordContent}"/>
 
-		<CheckBox x:Name="UseWinAuth" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5" 
+		<CheckBox x:Name="UseWinAuth" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5" 
 				  Content="Use Integrated Security" IsChecked="{Binding UseWinAuth}"/>
 
-		<TextBlock Grid.Column="0" Grid.Row="2" Text="User Name:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
-		<TextBox Grid.Column="1" Grid.Row="2" Text="{Binding UserName}" VerticalAlignment="Center" HorizontalAlignment="Stretch" 
+		<TextBlock Grid.Column="0" Grid.Row="2" Text="User Name:" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5"/>
+		<TextBox Grid.Column="1" Grid.Row="2" Text="{Binding UserName}" VerticalAlignment="Center" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
 				 Margin="5" MinWidth="100" IsEnabled="{Binding IsChecked, ElementName=UseWinAuth,Converter={StaticResource InverseBooleanConverter}}" />
 
 		<TextBlock Grid.Column="2" Grid.Row="2" Text="Password:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
-		<PasswordBox Grid.Column="3" Grid.Row="2" Name="PasswordContent" VerticalAlignment="Center" HorizontalAlignment="Stretch" 
+		<PasswordBox Grid.Column="3" Grid.Row="2" Name="PasswordContent" VerticalAlignment="Center" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
 				 Margin="5" MinWidth="100" IsEnabled="{Binding IsChecked, ElementName=UseWinAuth,Converter={StaticResource InverseBooleanConverter}}"/>
 
-		<TextBlock Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="4" Text="{Binding ServerMessage,Mode=OneWay}" HorizontalAlignment="Center"
-				   Margin="5" Foreground="{Binding ValidConnection,Mode=OneWay,Converter={StaticResource ResultToColorConverter}}"/>
+		<TextBlock Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="4" Text="{Binding ServerMessage,Mode=OneWay}" Margin="5"
+				   VerticalAlignment="Center" HorizontalAlignment="Stretch"
+				   Foreground="{Binding ValidConnection,Mode=OneWay,Converter={StaticResource ResultToColorConverter}}"/>
 	</Grid>
 </UserControl>
