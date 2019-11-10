@@ -5,9 +5,9 @@ using System.Windows.Threading;
 
 namespace Sql_Widget.Views.Controls
 {
-	public partial class DBandTableControl : UserControl
+	public partial class DBSelectControl : UserControl
 	{
-		public DBandTableControl()
+		public DBSelectControl()
 		{
 			InitializeComponent();
 			this.IsVisibleChanged += new DependencyPropertyChangedEventHandler(DBandTableControl_IsVisibleChanged);

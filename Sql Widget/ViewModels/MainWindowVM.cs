@@ -1,6 +1,7 @@
 ﻿using Sql_Widget.Entities;
 using Sql_Widget.Helper;
 using Sql_Widget.Models;
+using Sql_Widget.Views;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,6 +26,8 @@ namespace Sql_Widget.ViewModels
 		public TabItem SelectedTab { get; set; }
 		public bool TopMost { get; set; }
 		public bool VisibleInTaskbar { get { return !TopMost; } }
+		public bool MainIsExpanded { get; set; }
+		public Visibility MainIconsVisibility => MainIsExpanded ? Visibility.Visible : Visibility.Collapsed;
 		#endregion
 		#region Server
 		private bool _useWinAuth;
@@ -59,12 +62,16 @@ namespace Sql_Widget.ViewModels
 		#region History
 		public List<HistoryItem> HistoryItems { get; set; } = new List<HistoryItem>();
 		#endregion
+		#region Favorite
+		public List<FavoriteItem> FavoriteItems { get; set; }
+		#endregion
 		#endregion
 
 		#region Methods
 		public MainWindowVM()
 		{
 			VerfiyServer();
+			FavoriteItems = FavoriteModel.GetFavoriteList();
 		}
 
 		private async void VerfiyServer()
@@ -122,128 +129,120 @@ namespace Sql_Widget.ViewModels
 
 		#region Commands
 		#region Window
-		public ICommand ChangeTab
+		public ICommand ChangeTab => new ButtonsCommand((object obj) =>
 		{
-			get
-			{
-				return new ButtonsCommand((object obj) =>
-				{
-					var tabs = (TabControl)obj;
-					tabs.SelectedIndex = tabs.SelectedIndex < tabs.Items.Count - 1 ? tabs.SelectedIndex + 1 : 0;
-				});
-			}
-		}
+			var tabs = obj as TabControl;
+			tabs.SelectedIndex = tabs.SelectedIndex < tabs.Items.Count - 1 ? tabs.SelectedIndex + 1 : 0;
+		});
 		#endregion
 		#region Server
-		public ICommand SaveServerCommand
+		public ICommand SaveServerCommand => new ButtonsCommand((object obj) =>
 		{
-			get
-			{
-				return new ButtonsCommand((object obj) =>
-				{
-					ValidConnection = false;
-					Properties.Settings.Default.Server = ServerName;
-					Properties.Settings.Default.UserName = UserName;
-					Properties.Settings.Default.Password = (obj as PasswordBox).Password;
-					Properties.Settings.Default.Save();
-					VerfiyServer();
-				});
-			}
-		}
+			ValidConnection = false;
+			Properties.Settings.Default.Server = ServerName;
+			Properties.Settings.Default.UserName = UserName;
+			Properties.Settings.Default.Password = (obj as PasswordBox).Password;
+			Properties.Settings.Default.Save();
+			VerfiyServer();
+		});
 		#endregion
 		#region DB Bar
 
-		public ICommand HelpCommand
-		{
-			get
-			{
-				return new ButtonsCommand((object obj) =>
-				{
-					Process.Start("Help.md");
-				});
-			}
-		}
-		public ICommand CloseCommand
-		{
-			get
-			{
-				return new ButtonsCommand((object obj) =>
-				{
-					var window = (Window)obj;
-					window.Close();
-					if (Application.Current == null) return;
-					Application.Current.Shutdown();
-					//Environment.Exit(1);
-				});
-			}
-		}
-		public ICommand SelectDBCommand
-		{
-			get
-			{
-				return new ButtonsCommand((object obj) =>
-				{
-					var comboBox = (ComboBox)obj;
+		public ICommand HelpCommand => new ButtonsCommand((object obj) => Process.Start("Help.md"));
 
-					if (!DBsList.Contains(comboBox.Text))
-						comboBox.Text = "";
-					SelectedDB = comboBox.Text;
-				});
-			}
-		}
+		public ICommand CloseCommand => new ButtonsCommand((object obj) =>
+		{
+			var window = obj as Window;
+			window.Close();
+			if (Application.Current == null) return;
+			Application.Current.Shutdown();
+			//Environment.Exit(1);
+		});
+
+		public ICommand SelectDBCommand => new ButtonsCommand((object obj) =>
+		{
+			var comboBox = obj as ComboBox;
+
+			if (!DBsList.Contains(comboBox.Text))
+				comboBox.Text = "";
+			SelectedDB = comboBox.Text;
+		});
+		#endregion
+		#region Favorite
+		public ICommand AddFavoriteCommand => new ButtonsCommand((object obj) =>
+		{
+			var favoriteWindow = new FavoriteWindow();
+			var vm = new FavoriteWindowVM { CloseAction = new Action(favoriteWindow.Close) };
+			favoriteWindow.DataContext = vm;
+			favoriteWindow.ShowDialog();
+			FavoriteItems = FavoriteModel.GetFavoriteList();
+		});
+
+		public ICommand EditFavoriteCommand => new ButtonsCommand((object obj) =>
+		{
+			var item = obj as FavoriteItem;
+			var favoriteWindow = new FavoriteWindow();
+			var vm = new FavoriteWindowVM(item) { CloseAction = new Action(favoriteWindow.Close) };
+			favoriteWindow.DataContext = vm;
+			favoriteWindow.ShowDialog();
+			FavoriteItems = FavoriteModel.GetFavoriteList();
+		});
+
+		public ICommand DeleteFavoriteCommand => new ButtonsCommand((object obj) =>
+		{
+			var item = obj as FavoriteItem;
+			//todo: confirm dialog before delete
+			FavoriteItems = FavoriteModel.RemoveFavoriteItem(item);
+		});
+
 		#endregion
 		#region Bottom Buttons
-		public ICommand ExecuteCommand
-		{
-			get
-			{
-				return new ButtonsCommand((object obj) =>
-				{
-					switch (SelectedTab.Header.ToString())
-					{
-						case "Query":
-							ExecutableQuery = QueryContent;
-							break;
-						case "History":
-							ExecutableQuery = string.Join(";", HistoryItems.Where(x => x.Selected).Select(x => x.Query));
-							break;
-						default:
-							break;
-					}
-					if (!IsValidExecutableQuery) return;
-					foreach (string query in ExecutableQuery.Split(';').Where(x => !string.IsNullOrWhiteSpace(x)))
-					{
-						var newResult = new ResultWindow();
-						var vm = new ResultVM(SelectedDB, query);
-						newResult.DataContext = vm;
-						newResult.Show();
-						AddToHistory(SelectedDB, query, vm);
-					}
-				});
-			}
-		}
+		public ICommand ExecuteCommand => new ButtonsCommand((object obj) =>
+		 {
+			 switch (SelectedTab.Header.ToString())
+			 {
+				 case "Query":
+					 ExecutableQuery = QueryContent;
+					 break;
+				 case "History":
+					 ExecutableQuery = string.Join(";", HistoryItems.Where(x => x.Selected).Select(x => x.Query));
+					 break;
+				 case "Favorite":
+					 ExecutableQuery = string.Join(";", FavoriteItems.Where(x => x.Selected).Select(x => x.QueryWithVariables));
+					 break;
+				 default:
+					 break;
+			 }
+			 if (!IsValidExecutableQuery) return;
+			 foreach (string query in ExecutableQuery.Split(';').Where(x => !string.IsNullOrWhiteSpace(x)))
+			 {
+				 var newResult = new ResultWindow();
+				 var vm = new ResultVM(SelectedDB, query);
+				 newResult.DataContext = vm;
+				 newResult.Show();
+				 AddToHistory(SelectedDB, query, vm);
+			 }
+		 });
 
-		public ICommand ClearCommand
+		public ICommand ClearCommand => new ButtonsCommand((object obj) =>
 		{
-			get
+			switch (SelectedTab.Header.ToString())
 			{
-				return new ButtonsCommand((object obj) =>
-				{
-					switch (SelectedTab.Header.ToString())
-					{
-						case "Query":
-							QueryContent = string.Empty;
-							break;
-						case "History":
-							HistoryItems.ForEach(x => x.Selected = false);
-							HistoryItems = new List<HistoryItem>(HistoryItems);
-							break;
-						default:
-							break;
-					}
-				});
+				case "Query":
+					QueryContent = string.Empty;
+					break;
+				case "History":
+					HistoryItems.ForEach(x => x.Selected = false);
+					HistoryItems = new List<HistoryItem>(HistoryItems);
+					break;
+				case "Favorite":
+					FavoriteItems.ForEach(x => x.Selected = false);
+					FavoriteItems = FavoriteModel.GetFavoriteList();
+					break;
+				default:
+					break;
 			}
-		}
+		});
 		#endregion
 		#endregion
 	}
