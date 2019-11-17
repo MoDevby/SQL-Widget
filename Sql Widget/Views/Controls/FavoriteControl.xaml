@@ -5,60 +5,57 @@
 
 			xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" FontSize="20"
 			FontFamily="{DynamicResource MaterialDesignFont}" Background="{DynamicResource MaterialDesignPaper}">
-	<UserControl.Resources>
-		<converters:VariableVisibilityConverter x:Key="VariableVisibilityConverter" />
-		<DataTemplate x:Key="FavoriteElement">
-			<Grid Margin="5" >
-				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition/>
-				</Grid.RowDefinitions>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="Auto"/>
-					<ColumnDefinition Width="*"/>
-					<ColumnDefinition Width="Auto"/>
-				</Grid.ColumnDefinitions>
-				<CheckBox Grid.RowSpan="2" Grid.Column="0" Margin="5,0" IsChecked="{Binding Selected, Mode=OneWayToSource}"/>
+    <UserControl.Resources>
+        <converters:VariableVisibilityConverter x:Key="VariableVisibilityConverter" />
+        <DataTemplate x:Key="FavoriteElement">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-				<TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Description}" Margin="5,0" Foreground="{DynamicResource SecondaryAccentBrush}"/>
-				<TextBox Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" Margin="5,0" Text="{Binding Query}" IsReadOnly="True"
-						 MaxWidth="500" VerticalContentAlignment="Top"/>
+                <DockPanel Grid.Column="0" VerticalAlignment="Stretch" >
+                    <CheckBox DockPanel.Dock="Top" Margin="0,17,0,5" IsChecked="{Binding Selected, Mode=OneWayToSource}"/>
+                    <Button DockPanel.Dock="Bottom" Margin="0,5" Style="{StaticResource MaterialDesignFlatButton}" Padding="0" 
+                           Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Path= DataContext.Copy2Clipboard}"
+						CommandParameter="{Binding}" ToolTip="Copy To Clipboard">
+                        <materialDesign:PackIcon Kind="ContentCopy" Height="24" Width="24" VerticalAlignment="Center"/>
+                    </Button>
+                </DockPanel>
 
-				<StackPanel Grid.RowSpan="2" Grid.Column="2">
-					<Button Margin="5,0,5,5"
+                <Expander Grid.Column="1" Margin="3">
+                    <Expander.Header>
+                        <TextBlock Text="{Binding Description}" Foreground="{DynamicResource SecondaryAccentBrush}"/>
+                    </Expander.Header>
+                    <TextBox Margin="3" TextWrapping="Wrap" Text="{Binding Query}" IsReadOnly="True" MaxWidth="500" VerticalContentAlignment="Top"/>
+                </Expander>
+
+                <StackPanel Grid.Column="2">
+                    <Button Margin="5,0,5,5"
 						Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Path= DataContext.EditFavoriteCommand}"
 						CommandParameter="{Binding}" Style="{StaticResource MaterialDesignFloatingActionMiniButton}">
-						<materialDesign:PackIcon Kind="Pencil" Height="24" Width="24" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-					</Button>
-					<Button Margin="5" Background="#D11A2A" BorderBrush="#D11A2A"
+                        <materialDesign:PackIcon Kind="Pencil" Height="24" Width="24" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    </Button>
+                    <Button Margin="5" Background="#D11A2A" BorderBrush="#D11A2A"
 						Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Path= DataContext.DeleteFavoriteCommand}"
 						CommandParameter="{Binding}" Style="{StaticResource MaterialDesignFloatingActionMiniButton}">
-						<materialDesign:PackIcon Kind="Delete" Height="24" Width="24" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-					</Button>
-				</StackPanel>
+                        <materialDesign:PackIcon Kind="Delete" Height="24" Width="24" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    </Button>
+                </StackPanel>                
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
 
-				<!--<WrapPanel Grid.Row="2" Grid.ColumnSpan="3">
-					<TextBox Margin="5,0" materialDesign:HintAssist.Hint="@VAR_1" Text="{Binding Var1, UpdateSourceTrigger=PropertyChanged}"
-							 Visibility="{Binding Query, Mode=OneWay, Converter={StaticResource VariableVisibilityConverter}, ConverterParameter=1}"/>
-					<TextBox Margin="5,0" materialDesign:HintAssist.Hint="@VAR_2" Text="{Binding Var2, UpdateSourceTrigger=PropertyChanged}"
-							 Visibility="{Binding Query, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource VariableVisibilityConverter}, ConverterParameter=2}"/>
-					<TextBox Margin="5,0" materialDesign:HintAssist.Hint="@VAR_3" Text="{Binding Var3, UpdateSourceTrigger=PropertyChanged}"
-							 Visibility="{Binding Query, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource VariableVisibilityConverter}, ConverterParameter=3}"/>
-				</WrapPanel>-->
-			</Grid>
-		</DataTemplate>
-	</UserControl.Resources>
-
-	<Grid MaxWidth="500">
-		<Grid.RowDefinitions>
-			<RowDefinition/>
-			<RowDefinition Height="Auto"/>
-		</Grid.RowDefinitions>
-		<ListBox Grid.Row="0" Margin="5" ItemTemplate="{StaticResource FavoriteElement}" ItemsSource="{Binding FavoriteItems}" HorizontalContentAlignment="Stretch"/>
-		<Button Grid.Row="1" Foreground="ForestGreen" Style="{StaticResource MaterialDesignFlatButton}" Command="{Binding AddFavoriteCommand}"
+    <Grid MaxWidth="500">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ListBox Grid.Row="0" Margin="5" ItemTemplate="{StaticResource FavoriteElement}" ItemsSource="{Binding FavoriteItems}" HorizontalContentAlignment="Stretch"/>
+        <Button Grid.Row="1" Foreground="ForestGreen" Style="{StaticResource MaterialDesignFlatButton}" Command="{Binding AddFavoriteCommand}"
 				ToolTip="Add new favorite query" Padding="0">
-			<materialDesign:PackIcon Kind="Plus" Height="48" Width="48" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-		</Button>
-	</Grid>
+            <materialDesign:PackIcon Kind="Plus" Height="48" Width="48" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Button>
+    </Grid>
 </UserControl>
