@@ -191,8 +191,10 @@ namespace Sql_Widget.ViewModels
         public ICommand DeleteFavoriteCommand => new ButtonsCommand((object obj) =>
         {
             var item = obj as FavoriteItem;
-            //todo: confirm dialog before delete
-            FavoriteItems = FavoriteModel.RemoveFavoriteItem(item);
+            var messageBoxResult = MessageBox.Show($"Are you sure you want to delete '{item.Description}' from your favorit list?",
+                "Delete Confirmation", MessageBoxButton.YesNo);
+            if (messageBoxResult == MessageBoxResult.Yes)
+                FavoriteItems = FavoriteModel.RemoveFavoriteItem(item);
         });
 
         public ICommand Copy2Clipboard => new ButtonsCommand((object obj) =>
