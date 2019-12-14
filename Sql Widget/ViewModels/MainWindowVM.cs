@@ -26,7 +26,7 @@ namespace Sql_Widget.ViewModels
         public TabItem SelectedTab { get; set; }
         public bool TopMost { get; set; }
         public bool VisibleInTaskbar { get { return !TopMost; } }
-        public bool MainIsExpanded { get; set; }
+        public bool MainIsExpanded { get; set; } = true;
         public Visibility MainIconsVisibility => MainIsExpanded ? Visibility.Visible : Visibility.Collapsed;
         #endregion
         #region Server
@@ -199,7 +199,7 @@ namespace Sql_Widget.ViewModels
         {
             var item = obj as FavoriteItem;
             Clipboard.SetText(item.Query);
-        });       
+        });
         #endregion
         #region Bottom Buttons
         public ICommand ExecuteCommand => new ButtonsCommand((object obj) =>

@@ -3,8 +3,7 @@
 			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			xmlns:converters="clr-namespace:Sql_Widget.Helper"
 
-			xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" FontSize="20"
-			FontFamily="{DynamicResource MaterialDesignFont}" Background="{DynamicResource MaterialDesignPaper}">
+			FontSize="20" FontFamily="{DynamicResource MaterialDesignFont}" Background="{DynamicResource MaterialDesignPaper}">
 	<UserControl.Resources>
 		<converters:ResultToColorConverter x:Key="ResultToColorConverter" />
 		<Style x:Key="MyGridStyle" TargetType="{x:Type Grid}">
